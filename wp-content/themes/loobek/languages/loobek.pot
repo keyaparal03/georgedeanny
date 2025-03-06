@@ -1,0 +1,966 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Loobek\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-03 08:49+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.6.6; wp-6.3.1\n"
+"X-Domain: loobek"
+
+#: framework/theme_control.php:514 woocommerce/single-product/rating.php:40
+msgid "%d Review"
+msgid_plural "%d Reviews"
+msgstr[0] ""
+msgstr[1] ""
+
+#. %s: title of menu item which is invalid
+#: framework/mega_menu.php:279
+#, php-format
+msgid "%s (Invalid)"
+msgstr ""
+
+#. %s: title of menu item in draft status
+#: framework/mega_menu.php:283
+#, php-format
+msgid "%s (Pending)"
+msgstr ""
+
+#: woocommerce/content-product-cat.php:65
+#, php-format
+msgid "%s Product"
+msgid_plural "%s Products"
+msgstr[0] ""
+msgstr[1] ""
+
+#: framework/theme_filter.php:45
+msgid "(Edit)"
+msgstr ""
+
+#: framework/mega_menu.php:422
+msgid "1 column"
+msgstr ""
+
+#: framework/mega_menu.php:423
+msgid "2 columns"
+msgstr ""
+
+#: framework/mega_menu.php:424
+msgid "3 columns"
+msgstr ""
+
+#: framework/woo_hooks.php:1244
+msgid "360"
+msgstr ""
+
+#: framework/mega_menu.php:425
+msgid "4 columns"
+msgstr ""
+
+#: 404.php:6
+msgid "404. Page not found."
+msgstr ""
+
+#. Description of the theme
+msgid ""
+"A Premium and Responsive WordPress theme, designed for E-Commerce websites"
+msgstr ""
+
+#: admin/register_sidebar.php:88
+msgid "Add Sidebar"
+msgstr ""
+
+#: framework/woo_extra_products.php:72
+msgid "Add some accessories"
+msgstr ""
+
+#: framework/woo_hooks.php:2153
+msgid "Add to compare"
+msgstr ""
+
+#: framework/woo_hooks.php:2105 framework/woo_hooks.php:2112
+msgid "Add to wishlist"
+msgstr ""
+
+#: framework/woo_hooks.php:883 framework/woo_hooks.php:889
+msgid "All"
+msgstr ""
+
+#: framework/theme_functions.php:1151
+msgid "All blog posts"
+msgstr ""
+
+#: framework/woo_hooks.php:874
+msgid "All products"
+msgstr ""
+
+#: archive.php:40
+msgid "Archives"
+msgstr ""
+
+#: framework/theme_functions.php:600
+msgid "Articles posted by "
+msgstr ""
+
+#: framework/woo_hooks.php:2161
+msgid "Ask about product"
+msgstr ""
+
+#: framework/woo_hooks.php:1547
+msgid "Availability"
+msgstr ""
+
+#: footer.php:109
+msgid "Back to Top"
+msgstr ""
+
+#: framework/mega_menu.php:486
+msgid "Background Position"
+msgstr ""
+
+#: framework/mega_menu.php:473
+msgid "Background Repeat"
+msgstr ""
+
+#. Name of the template
+msgid "Blank Page Template"
+msgstr ""
+
+#: admin/redux.php:202
+msgid "Blog"
+msgstr ""
+
+#: admin/register_sidebar.php:21
+msgid "Blog Detail Sidebar"
+msgstr ""
+
+#: admin/register_sidebar.php:13
+msgid "Blog Sidebar"
+msgstr ""
+
+#. Name of the template
+msgid "Blog Template"
+msgstr ""
+
+#: framework/woo_hooks.php:1531
+msgid "Brands"
+msgstr ""
+
+#: framework/woo_hooks.php:1595
+msgid "Buy Now"
+msgstr ""
+
+#: framework/mega_menu.php:525
+msgid "Cancel"
+msgstr ""
+
+#: framework/theme_filter.php:96
+msgid "Cancel reply"
+msgstr ""
+
+#: framework/theme_functions.php:351
+msgid "Cant delete the sidebar. Please try again!"
+msgstr ""
+
+#: framework/woo_hooks.php:1537
+msgid "Categories:"
+msgstr ""
+
+#: framework/woo_hooks.php:669
+msgid "Categories: "
+msgstr ""
+
+#: archive.php:34
+msgid "Category: "
+msgstr ""
+
+#: framework/mega_menu.php:495
+msgid "Center Bottom"
+msgstr ""
+
+#: framework/mega_menu.php:496
+msgid "Center Center"
+msgstr ""
+
+#: framework/mega_menu.php:494
+msgid "Center Top"
+msgstr ""
+
+#: framework/theme_functions.php:1287 framework/theme_functions.php:1308
+#: framework/woo_functions.php:202
+msgid "Checkout"
+msgstr ""
+
+#: framework/theme_functions.php:348
+msgid "Choose an image"
+msgstr ""
+
+#: framework/woo_hooks.php:1358
+msgid "Choose your"
+msgstr ""
+
+#: framework/woo_hooks.php:1013
+msgid "Clear all filters"
+msgstr ""
+
+#: framework/woo_hooks.php:513
+msgid "Color"
+msgstr ""
+
+#: admin/redux.php:157
+msgid "Color Scheme"
+msgstr ""
+
+#: framework/mega_menu.php:417
+msgid "Columns"
+msgstr ""
+
+#: comments.php:12
+msgid "Comments"
+msgstr ""
+
+#: comments.php:29
+msgid "Comments are closed."
+msgstr ""
+
+#: framework/woo_functions.php:121
+msgid "Continue Shopping"
+msgstr ""
+
+#: framework/theme_functions.php:1290 framework/theme_functions.php:1307
+#: framework/woo_functions.php:206
+msgid "Continue shopping"
+msgstr ""
+
+#: framework/woo_functions.php:49
+msgid "Create an account"
+msgstr ""
+
+#: framework/mega_menu.php:362
+msgid "CSS Classes (optional)"
+msgstr ""
+
+#: admin/redux.php:238
+msgid "Custom Code"
+msgstr ""
+
+#: admin/register_sidebar.php:86
+msgid "Custom Sidebar Name"
+msgstr ""
+
+#: framework/woo_hooks.php:2246
+msgid "Customers also bought"
+msgstr ""
+
+#: archive.php:19
+msgid "Day: "
+msgstr ""
+
+#: framework/mega_menu.php:374
+#: woocommerce/single-product/tabs/description.php:25
+msgid "Description"
+msgstr ""
+
+#: framework/theme_functions.php:350
+msgid "Do you want to delete this sidebar?"
+msgstr ""
+
+#: framework/theme_filter.php:30
+msgid "Edit"
+msgstr ""
+
+#: framework/mega_menu.php:326 framework/mega_menu.php:328
+msgid "Edit Menu Item"
+msgstr ""
+
+#: framework/theme_functions.php:353
+msgid "Edit Post"
+msgstr ""
+
+#: framework/woo_hooks.php:2252
+msgid "Empty cart"
+msgstr ""
+
+#: framework/mega_menu.php:403
+msgid "Enable Mega Menu"
+msgstr ""
+
+#: framework/theme_functions.php:598
+msgid "Error 404"
+msgstr ""
+
+#: admin/register_sidebar.php:128
+msgid "Error! It seems that the sidebar exists. Please try again!"
+msgstr ""
+
+#: framework/woo_hooks.php:979
+msgid "Filter"
+msgstr ""
+
+#: framework/woo_hooks.php:921
+msgid "Filter by"
+msgstr ""
+
+#: admin/register_sidebar.php:37
+msgid "Filter Widget Area"
+msgstr ""
+
+#: admin/redux.php:184
+msgid "Footer"
+msgstr ""
+
+#: framework/mega_menu.php:421
+msgid "Fullwidth"
+msgstr ""
+
+#: admin/redux.php:148
+msgid "General"
+msgstr ""
+
+#: 404.php:9
+msgid "Go Back"
+msgstr ""
+
+#: admin/redux.php:175
+msgid "Header"
+msgstr ""
+
+#: framework/woo_extra_products.php:71
+msgid "Heading"
+msgstr ""
+
+#: framework/woo_hooks.php:958
+msgid "Hide filters"
+msgstr ""
+
+#: framework/theme_functions.php:596
+msgid "Home"
+msgstr ""
+
+#: admin/register_sidebar.php:5
+msgid "Home Sidebar"
+msgstr ""
+
+#. URI of the theme
+msgid "https://demo.theme-sky.com/loobek/"
+msgstr ""
+
+#. Author URI of the theme
+msgid "https://theme-sky.com/"
+msgstr ""
+
+#: framework/woo_hooks.php:2213
+msgid "Hurry! Only %d left in stock"
+msgstr ""
+
+#: framework/woo_functions.php:46
+msgid "I forget the password"
+msgstr ""
+
+#: framework/woo_functions.php:48
+msgid "I'm new client."
+msgstr ""
+
+#: framework/woo_functions.php:110
+msgid "in cart"
+msgstr ""
+
+#: framework/woo_hooks.php:1544
+msgid "In Stock"
+msgstr ""
+
+#: framework/theme_functions.php:1243 framework/quickshop.php:164
+#: framework/quickshop.php:167 framework/woo_hooks.php:1313
+#: framework/woo_hooks.php:1319
+msgid "Invalid Product"
+msgstr ""
+
+#: framework/theme_filter.php:94
+msgid "Leave a comment"
+msgstr ""
+
+#: framework/theme_filter.php:95
+#, php-format
+msgid "Leave a Reply to %s"
+msgstr ""
+
+#: framework/mega_menu.php:489
+msgid "Left Bottom"
+msgstr ""
+
+#: framework/mega_menu.php:490
+msgid "Left Center"
+msgstr ""
+
+#: framework/mega_menu.php:488
+msgid "Left Top"
+msgstr ""
+
+#: admin/redux.php:130
+msgid "Like us on Facebook"
+msgstr ""
+
+#: framework/mega_menu.php:368
+msgid "Link Relationship (XFN)"
+msgstr ""
+
+#: framework/woo_hooks.php:1062
+msgid "Load more"
+msgstr ""
+
+#: framework/theme_filter.php:89
+#, php-format
+msgid ""
+"Logged in as <a href=\"%1$s\">%2$s</a>. <a href=\"%3$s\" title=\"Log out of "
+"this account\">Log out?</a>"
+msgstr ""
+
+#: framework/woo_functions.php:77
+msgid "Logout"
+msgstr ""
+
+#. Name of the theme
+msgid "Loobek"
+msgstr ""
+
+#: footer.php:20
+msgid "Main Menu"
+msgstr ""
+
+#: admin/redux.php:193
+msgid "Menu"
+msgstr ""
+
+#: framework/theme_functions.php:75
+msgid "Mobile Navigation"
+msgstr ""
+
+#: archive.php:22
+msgid "Month: "
+msgstr ""
+
+#: archive.php:22
+msgctxt "monthly archives date format"
+msgid "F Y"
+msgstr ""
+
+#: framework/mega_menu.php:324
+msgid "Move down"
+msgstr ""
+
+#: framework/mega_menu.php:309
+msgid "Move up"
+msgstr ""
+
+#: framework/woo_functions.php:34
+msgid "My Account"
+msgstr ""
+
+#: framework/woo_functions.php:54
+msgid "My account"
+msgstr ""
+
+#: framework/woo_functions.php:58
+msgid "My orders"
+msgstr ""
+
+#: framework/woo_hooks.php:1524
+msgid "N/A"
+msgstr ""
+
+#: framework/mega_menu.php:344
+msgid "Navigation Label"
+msgstr ""
+
+#: comments.php:23
+msgid "Newer Comments"
+msgstr ""
+
+#: framework/theme_functions.php:810 framework/woo_hooks.php:113
+msgid "Next page"
+msgstr ""
+
+#: admin/functions.php:118
+msgid "No Footer"
+msgstr ""
+
+#: framework/theme_functions.php:1119
+msgid "No products were found"
+msgstr ""
+
+#: framework/mega_menu.php:475
+msgid "No Repeat"
+msgstr ""
+
+#: comments.php:22
+msgid "Older Comments"
+msgstr ""
+
+#: archive.php:37
+msgid "OOPS! FILE NOT FOUND"
+msgstr ""
+
+#: framework/mega_menu.php:357
+msgid "Open link in a new window/tab"
+msgstr ""
+
+#: framework/mega_menu.php:509
+#, php-format
+msgid "Original: %s"
+msgstr ""
+
+#: framework/theme_functions.php:601
+msgid "Page"
+msgstr ""
+
+#: framework/theme_filter.php:45
+msgid "Pingback:"
+msgstr ""
+
+#: framework/theme_functions.php:985
+msgid "Popular"
+msgstr ""
+
+#: framework/theme_functions.php:809 framework/woo_hooks.php:112
+msgid "Prev page"
+msgstr ""
+
+#: framework/theme_functions.php:72
+msgid "Primary Navigation"
+msgstr ""
+
+#: admin/register_sidebar.php:29
+msgid "Product Category Sidebar"
+msgstr ""
+
+#: framework/woo_hooks.php:1524
+msgid "Product code"
+msgstr ""
+
+#: admin/register_sidebar.php:45
+msgid "Product Detail Sidebar"
+msgstr ""
+
+#: admin/redux.php:229
+msgid "Product Details"
+msgstr ""
+
+#: framework/theme_functions.php:1324
+msgid "Product has been added to your cart"
+msgstr ""
+
+#: framework/woo_hooks.php:2226
+msgid "Quantity"
+msgstr ""
+
+#: framework/woo_hooks.php:573
+msgid "Quick add to cart"
+msgstr ""
+
+#: framework/quickshop.php:16
+msgid "Quick view"
+msgstr ""
+
+#: content.php:205
+msgid "Read more"
+msgstr ""
+
+#: framework/woo_hooks.php:221
+msgid "Recommended for you"
+msgstr ""
+
+#: templates/related-posts.php:48
+msgid "Related Posts"
+msgstr ""
+
+#: framework/mega_menu.php:524
+msgid "Remove"
+msgstr ""
+
+#: framework/mega_menu.php:445 framework/mega_menu.php:463
+msgid "Remove Image"
+msgstr ""
+
+#: framework/woo_functions.php:137
+msgid "Remove this item"
+msgstr ""
+
+#: framework/mega_menu.php:476
+msgid "Repeat"
+msgstr ""
+
+#: framework/mega_menu.php:477
+msgid "Repeat X"
+msgstr ""
+
+#: framework/mega_menu.php:478
+msgid "Repeat Y"
+msgstr ""
+
+#: framework/theme_filter.php:82
+#, php-format
+msgid "Required fields are marked %s"
+msgstr ""
+
+#: framework/woo_hooks.php:105
+msgid "Reset filters"
+msgstr ""
+
+#: framework/woo_hooks.php:1891
+msgid "Reviews"
+msgstr ""
+
+#: framework/mega_menu.php:492
+msgid "Right Bottom"
+msgstr ""
+
+#: framework/mega_menu.php:493
+msgid "Right Center"
+msgstr ""
+
+#: framework/mega_menu.php:491
+msgid "Right Top"
+msgstr ""
+
+#: searchform.php:3 searchform.php:18 framework/theme_functions.php:961
+msgid "Search"
+msgstr ""
+
+#: framework/theme_functions.php:965
+msgid "Search For Products"
+msgstr ""
+
+#: searchform.php:6 framework/woo_extra_products.php:80
+msgid "Search for products"
+msgstr ""
+
+#: framework/theme_functions.php:597
+msgid "Search results for "
+msgstr ""
+
+#: index.php:10 archive.php:28
+msgid "Search Results for: "
+msgstr ""
+
+#: framework/woo_extra_products.php:248
+msgid "Select"
+msgstr ""
+
+#: admin/functions.php:165
+msgid "Select an attribute"
+msgstr ""
+
+#: admin/functions.php:139
+msgid "Select Custom Block"
+msgstr ""
+
+#: framework/mega_menu.php:439 framework/mega_menu.php:457
+msgid "Select Image"
+msgstr ""
+
+#: framework/theme_functions.php:346
+msgid "Select Images"
+msgstr ""
+
+#: framework/mega_menu.php:409
+msgid "Select Mega Menu"
+msgstr ""
+
+#: framework/woo_extra_products.php:75
+msgid "Select products"
+msgstr ""
+
+#: framework/woo_extra_products.php:248
+msgid "Selected"
+msgstr ""
+
+#: framework/woo_hooks.php:1030
+msgid "Selected filters"
+msgstr ""
+
+#: framework/mega_menu.php:454
+msgid "Set Background"
+msgstr ""
+
+#: framework/mega_menu.php:436
+msgid "Set Icon"
+msgstr ""
+
+#: single.php:165
+msgid "Share "
+msgstr ""
+
+#: woocommerce/loop/orderby.php:24
+msgid "Shop order"
+msgstr ""
+
+#: admin/redux.php:220
+msgid "Shop/Product Category"
+msgstr ""
+
+#: framework/woo_functions.php:120
+msgid "Shopping Cart is empty"
+msgstr ""
+
+#: framework/woo_hooks.php:714
+msgid "Show"
+msgstr ""
+
+#: framework/theme_functions.php:194
+msgid "Show all reviews"
+msgstr ""
+
+#: framework/woo_hooks.php:958
+msgid "Show filters"
+msgstr ""
+
+#: woocommerce/single-product/tabs/description.php:41
+msgid "Show Less"
+msgstr ""
+
+#: woocommerce/single-product/tabs/description.php:40
+msgid "Show More"
+msgstr ""
+
+#: framework/woo_hooks.php:766
+msgid "Show only products on sale"
+msgstr ""
+
+#: framework/woo_functions.php:32
+msgid "Sign in/Sign up"
+msgstr ""
+
+#: framework/woo_hooks.php:1776 framework/woo_hooks.php:1832
+msgid "Size & Shape"
+msgstr ""
+
+#: framework/woo_hooks.php:1511
+msgid "Size guide"
+msgstr ""
+
+#: framework/woo_hooks.php:618
+msgid "SKU"
+msgstr ""
+
+#: 404.php:7
+msgid ""
+"Sorry, we couldn’t find the page you where looking for. We suggest that you "
+"return to homepage."
+msgstr ""
+
+#: archive.php:75 page-templates/blog-template.php:73
+msgid "Sorry. There are no posts to display"
+msgstr ""
+
+#: index.php:34
+msgid "Sorry. There are no posts to display!"
+msgstr ""
+
+#: woocommerce/loop/orderby.php:29
+msgid "Sort by"
+msgstr ""
+
+#: framework/woo_hooks.php:121
+msgid "Sort by best selling"
+msgstr ""
+
+#: framework/mega_menu.php:420
+msgid "Stretch row"
+msgstr ""
+
+#: framework/mega_menu.php:419
+msgid "Stretch row & content"
+msgstr ""
+
+#: framework/mega_menu.php:394
+msgid "Sub Label Background Color"
+msgstr ""
+
+#: framework/mega_menu.php:387
+msgid "Sub Label Text"
+msgstr ""
+
+#: framework/theme_filter.php:97
+msgid "Submit"
+msgstr ""
+
+#: framework/woo_functions.php:200
+msgid "Subtotal : "
+msgstr ""
+
+#: framework/theme_functions.php:1255
+msgid "Succesfully added to cart"
+msgstr ""
+
+#: admin/register_sidebar.php:125
+msgid "Successfully added the sidebar"
+msgstr ""
+
+#: admin/register_sidebar.php:150
+msgid "Successfully deleted the sidebar"
+msgstr ""
+
+#: framework/woo_extra_products.php:41
+msgctxt "tab in product data box"
+msgid "TS Extra Products"
+msgstr ""
+
+#: archive.php:31
+msgid "Tag: "
+msgstr ""
+
+#: framework/theme_functions.php:599
+msgid "Tagged "
+msgstr ""
+
+#: framework/woo_hooks.php:1624
+msgid "Tags"
+msgstr ""
+
+#: single.php:173
+msgid "Tags "
+msgstr ""
+
+#: framework/mega_menu.php:376
+msgid ""
+"The description will be displayed in the menu if the current theme supports "
+"it."
+msgstr ""
+
+#: admin/redux.php:29 admin/redux.php:30
+msgid "Theme Options"
+msgstr ""
+
+#. Author of the theme
+msgid "Theme Sky Team"
+msgstr ""
+
+#: framework/theme_functions.php:1283
+msgid "There is %d item in your cart"
+msgid_plural "There are %d items in your cart"
+msgstr[0] ""
+msgstr[1] ""
+
+#: framework/mega_menu.php:350
+msgid "Title Attribute"
+msgstr ""
+
+#: framework/theme_functions.php:1285
+msgid "Total"
+msgstr ""
+
+#: index.php:35
+msgid "Try researching for something else."
+msgstr ""
+
+#: admin/redux.php:166
+msgid "Typography"
+msgstr ""
+
+#: framework/mega_menu.php:337
+msgid "URL"
+msgstr ""
+
+#: framework/theme_functions.php:349
+msgid "Use image"
+msgstr ""
+
+#: framework/theme_functions.php:347
+msgid "Use images"
+msgstr ""
+
+#: framework/woo_hooks.php:1227
+msgid "Video"
+msgstr ""
+
+#: framework/woo_functions.php:205
+msgid "View  my cart"
+msgstr ""
+
+#: framework/theme_functions.php:1102
+msgid "View all %d results"
+msgstr ""
+
+#: framework/theme_functions.php:1289 framework/theme_functions.php:1306
+msgid "View my cart"
+msgstr ""
+
+#: framework/theme_functions.php:352
+msgid "View Posts"
+msgstr ""
+
+#: framework/woo_functions.php:109
+msgid "View your shopping cart"
+msgstr ""
+
+#: framework/woo_functions.php:272 framework/woo_hooks.php:2105
+#: framework/woo_hooks.php:2112
+msgid "Wishlist"
+msgstr ""
+
+#: admin/redux.php:211
+msgid "WooCommerce"
+msgstr ""
+
+#: framework/theme_functions.php:193 framework/theme_control.php:519
+#: woocommerce/single-product/rating.php:42
+msgid "Write a review"
+msgstr ""
+
+#: archive.php:25
+msgid "Year: "
+msgstr ""
+
+#: archive.php:25
+msgctxt "yearly archives date format"
+msgid "Y"
+msgstr ""
+
+#: framework/theme_filter.php:88
+#, php-format
+msgid "You must be <a href=\"%s\">logged in</a> to post a comment."
+msgstr ""
+
+#: framework/woo_hooks.php:1052
+#, php-format
+msgid "You're viewed %s of %s products"
+msgstr ""
+
+#: framework/woo_hooks.php:1055
+#, php-format
+msgid "You're viewed all %s products"
+msgstr ""
+
+#: framework/woo_functions.php:124
+msgid "Your cart (%d item)"
+msgid_plural "Your cart (%d items)"
+msgstr[0] ""
+msgstr[1] ""
+
+#: framework/woo_functions.php:118
+msgid "Your cart (0 items)"
+msgstr ""
+
+#: framework/theme_filter.php:87
+msgid "Your Comment"
+msgstr ""
+
+#: framework/theme_filter.php:23
+msgid "Your comment is awaiting moderation."
+msgstr ""
+
+#: framework/theme_filter.php:79
+msgid "Your Email <span class=\"required\">*</span>"
+msgstr ""
+
+#: framework/theme_filter.php:78
+msgid "Your Name <span class=\"required\">*</span>"
+msgstr ""

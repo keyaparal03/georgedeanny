@@ -1,22 +1,27 @@
 # Ignore everything by default
 /*
 
-# But track wp-content directory
+# Allow tracking of wp-content directory
 !wp-content/
-wp-content/*
 
-# Keep the themes directory
+# Allow tracking of themes directory
 !wp-content/themes/
+
+# Ignore everything inside themes, except your specific theme
 wp-content/themes/*
-
-# But only track your specific theme
 !wp-content/themes/loobek/
-wp-content/themes/loobek/**
+!wp-content/themes/loobek/**
 
-
-
-# Keep the plugins directory
+# Allow tracking of plugins directory
 !wp-content/plugins/
+
+# Ignore all plugins by default
 wp-content/plugins/*
-# Ignore all other plugins
-wp-content/plugins/*
+
+# (Optional) If you want to track specific plugins, add them here
+# !wp-content/plugins/my-plugin/
+# !wp-content/plugins/my-plugin/**
+
+# Ignore uploads, cache, and unnecessary files
+wp-content/uploads/
+wp-content/cache/
