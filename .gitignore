@@ -1,0 +1,23 @@
+# Ignore everything by default
+/*
+
+# But track wp-content directory
+!wp-content/
+wp-content/*
+
+# Keep the themes directory
+!wp-content/themes/
+wp-content/themes/*
+
+# But only track your specific theme
+!wp-content/themes/loobek/
+wp-content/themes/loobek/**
+
+# Ignore all other themes
+wp-content/themes/*
+
+# Keep the plugins directory
+!wp-content/plugins/
+wp-content/plugins/*
+# Ignore all other plugins
+wp-content/plugins/*
