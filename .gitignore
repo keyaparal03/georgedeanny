@@ -13,8 +13,7 @@ wp-content/themes/*
 !wp-content/themes/loobek/
 wp-content/themes/loobek/**
 
-# Ignore all other themes
-wp-content/themes/*
+
 
 # Keep the plugins directory
 !wp-content/plugins/
