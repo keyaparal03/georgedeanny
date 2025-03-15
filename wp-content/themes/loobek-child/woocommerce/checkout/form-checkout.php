@@ -56,14 +56,14 @@ if ($default_billing) :
         <button type="button" class="btn btn-secondary" id="openPopupBilling">Change Billing Address</button>
 
 		<!-- Shipping Address Checkbox -->
-		<div class="shipping-checkbox">
-			<input type="checkbox" id="shipToDifferentAddress">
-			<label for="shipToDifferentAddress">Shipping address diffrent than billing address</label>
-		</div>
-		<!-- Shipping Address Box (Initially Hidden) -->
-		<div class="address-box" id="shippingAddressBox" style="display: none;">
-			<button type="button" class="btn btn-secondary" id="openPopupShipping" style="display: none;">Change Shipping Address</button>
-		</div>
+	<div class="shipping-checkbox">
+		<input type="checkbox" id="shipToDifferentAddress">
+		<label for="shipToDifferentAddress">Shipping address diffrent than billing address</label>
+	</div>
+	<!-- Shipping Address Box (Initially Hidden) -->
+	<div class="address-box" id="shippingAddressBox" style="display: none;">
+		<button type="button" class="btn btn-secondary" id="openPopupShipping" style="display: none;">Change Shipping Address</button>
+	</div>
     </div>
 
 <?php endif; ?>
@@ -186,8 +186,6 @@ if ($default_billing) :
 </form>
 
 <?php do_action( 'woocommerce_after_checkout_form', $checkout ); ?>
-
-
 <script>
 jQuery(document).ready(function($) {
     $("#openPopupShipping").click(function() {

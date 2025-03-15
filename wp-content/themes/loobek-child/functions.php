@@ -9,5 +9,3 @@ function loobek_child_register_scripts(){
     );
 }
 add_action( 'wp_enqueue_scripts', 'loobek_child_register_scripts', 99 );
-
-
