@@ -11,6 +11,8 @@
 wp-content/themes/*
 !wp-content/themes/loobek/
 !wp-content/themes/loobek/**
+!wp-content/themes/loobek-child/
+!wp-content/themes/loobek-child/**
 
 # Allow tracking of plugins directory
 !wp-content/plugins/

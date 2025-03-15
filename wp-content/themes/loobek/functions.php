@@ -31,3 +31,47 @@ add_filter( 'gettext', function( $translated_text, $text, $domain ) {
 
 
 
+//thwma_custom_address
+
+function switch_default_address() {
+    // Verify nonce for security
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'switch_address_nonce')) {
+        wp_send_json_error(['message' => 'Invalid request.']);
+        wp_die();
+    }
+
+    // Get user ID
+    $user_id = get_current_user_id();
+    if (!$user_id) {
+        wp_send_json_error(['message' => 'User not logged in.']);
+        wp_die();
+    }
+
+    // Get posted address key (e.g., address_1 or address_2)
+    $selected_address_key = sanitize_text_field($_POST['selected_address']);
+
+    // Get existing addresses
+    $addresses = get_user_meta($user_id, 'thwma_custom_address', true);
+
+    // Ensure data is an array
+    if (!is_array($addresses) || empty($addresses['billing'][$selected_address_key])) {
+        wp_send_json_error(['message' => 'Invalid address selected.']);
+        wp_die();
+    }
+
+    // Swap address_0 with the selected address
+    $temp = $addresses['billing']['address_0'];
+    $addresses['billing']['address_0'] = $addresses['billing'][$selected_address_key];
+    $addresses['billing'][$selected_address_key] = $temp;
+
+    // Update user meta
+    update_user_meta($user_id, 'thwma_custom_address', $addresses);
+
+    // Send success response
+    wp_send_json_success(['message' => 'Default address updated successfully.']);
+    wp_die();
+}
+
+// Register AJAX actions
+add_action('wp_ajax_switch_default_address', 'switch_default_address');
+add_action('wp_ajax_nopriv_switch_default_address', '__return_false'); // Prevent non-logged-in access
