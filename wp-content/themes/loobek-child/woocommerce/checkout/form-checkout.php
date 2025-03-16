@@ -158,11 +158,95 @@ if ($default_billing) :
 		<?php do_action( 'woocommerce_checkout_before_customer_details' ); ?>
 
 		<div class="col2-set" id="customer_details">
-			<div class="col-1">
+			<?php 
+			 echo '<div class="checkout-cart-editor">';
+    // echo '<h3>Your order</h3>';
+    echo '<div class="checkout-cart-table">';
+    
+    // Get cart items
+    $cart_items = WC()->cart->get_cart();
+    
+    if (count($cart_items) > 0) {
+        ?>
+        <table class="shop_table checkout-cart-items">
+            <thead>
+                <tr>
+                    <th class="product-thumbnail">&nbsp;</th>
+                    <th class="product-name"><?php _e('Product', 'woocommerce'); ?></th>
+                    <th class="product-price"><?php _e('Price', 'woocommerce'); ?></th>
+                    <th class="product-quantity"><?php _e('Quantity', 'woocommerce'); ?></th>
+                    <th class="product-subtotal"><?php _e('Subtotal', 'woocommerce'); ?></th>
+                    <th class="product-remove">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($cart_items as $cart_item_key => $cart_item) {
+                    $_product = apply_filters('woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key);
+                    if ($_product && $_product->exists() && $cart_item['quantity'] > 0) {
+                        ?>
+                        <tr class="<?php echo esc_attr(apply_filters('woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key)); ?>">
+                            <td class="product-thumbnail">
+                                <?php
+                                $thumbnail = apply_filters('woocommerce_cart_item_thumbnail', $_product->get_image(), $cart_item, $cart_item_key);
+                                echo $thumbnail;
+                                ?>
+                            </td>
+                            <td class="product-name">
+                                <?php
+                                echo apply_filters('woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key);
+                                echo wc_get_formatted_cart_item_data($cart_item);
+                                ?>
+                            </td>
+                            <td class="product-price">
+                                <?php
+                                echo apply_filters('woocommerce_cart_item_price', WC()->cart->get_product_price($_product), $cart_item, $cart_item_key);
+                                ?>
+                            </td>
+                            <td class="product-quantity">
+                                <div class="quantity">
+                                    <input type="number" 
+                                           data-cart-item-key="<?php echo esc_attr($cart_item_key); ?>" 
+                                           class="input-text qty checkout-qty-input" 
+                                           step="1" 
+                                           min="0" 
+                                           max="<?php echo $_product->get_max_purchase_quantity(); ?>" 
+                                           value="<?php echo esc_attr($cart_item['quantity']); ?>" 
+                                           size="4" 
+                                           pattern="[0-9]*" 
+                                           inputmode="numeric" />
+                                </div>
+                            </td>
+                            <td class="product-subtotal">
+                                <?php
+                                echo apply_filters('woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal($_product, $cart_item['quantity']), $cart_item, $cart_item_key);
+                                ?>
+                            </td>
+                            <td class="product-remove">
+                                <a href="#" class="remove checkout-remove-item" data-cart-item-key="<?php echo esc_attr($cart_item_key); ?>">&times;</a>
+                            </td>
+                        </tr>
+                        <?php
+                    }
+                } ?>
+            </tbody>
+        </table>
+        <div class="checkout-cart-actions">
+            <button type="button" class="button checkout-update-cart"><?php _e('Update Cart', 'woocommerce'); ?></button>
+            <?php // Generate a nonce for our checkout editor
+            $nonce = wp_create_nonce('checkout_editor_nonce'); ?>
+            <input type="hidden" id="checkout_editor_nonce" name="checkout_editor_nonce" value="<?php echo $nonce; ?>" />
+        </div>
+        <?php
+    }
+    
+    echo '</div>';
+    echo '</div>';
+			?>
+			<div class="col-1" style="display:none;">
 				<?php do_action( 'woocommerce_checkout_billing' ); ?>
 			</div>
 
-			<div class="col-2">
+			<div class="col-2" style="display:none;">
 				<?php do_action( 'woocommerce_checkout_shipping' ); ?>
 			</div>
 		</div>
@@ -173,7 +257,7 @@ if ($default_billing) :
 	
 	<?php do_action( 'woocommerce_checkout_before_order_review_heading' ); ?>
 	
-	<h3 id="order_review_heading"><?php esc_html_e( 'Your order', 'woocommerce' ); ?></h3>
+	<!-- <h3 id="order_review_heading"><?php esc_html_e( 'Your order', 'woocommerce' ); ?></h3> -->
 	
 	<?php do_action( 'woocommerce_checkout_before_order_review' ); ?>
 
@@ -369,6 +453,10 @@ button#closePopupShipping,button#closePopupBilling {
 
 .checkout-btn:hover {
     background-color: #218838;
+}
+
+#customer_details{
+	/* display: none; */
 }
 
 </style>
