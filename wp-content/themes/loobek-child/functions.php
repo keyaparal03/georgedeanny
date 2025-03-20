@@ -64,6 +64,8 @@ function save_user_shipping_address() {
         'shipping_city'       => sanitize_text_field($formData['shipping_city']),
         'shipping_state'      => sanitize_text_field($formData['shipping_state']),
         'shipping_postcode'   => sanitize_text_field($formData['shipping_postcode']),
+		'shipping_phone'   => sanitize_text_field($formData['shipping_phone']),
+		'shipping_email'   => sanitize_text_field($formData['shipping_email']),
     ];
 
     // Get existing addresses
@@ -80,4 +82,49 @@ function save_user_shipping_address() {
     update_user_meta($user_id, 'thwma_custom_address', $addresses);
 
     wp_send_json_success(['message' => 'Shipping address added successfully!']);
+}
+
+add_action('wp_ajax_save_user_billing_address', 'save_user_billing_address');
+add_action('wp_ajax_nopriv_save_user_billing_address', 'save_user_billing_address');
+
+function save_user_billing_address() {
+    // Security check
+    check_ajax_referer('billing_nonce', 'nonce');
+
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'You must be logged in to add an address.']);
+    }
+
+    $user_id = get_current_user_id();
+
+    // Parse the serialized data
+    parse_str($_POST['formData'], $formData);
+
+    $new_address = [
+        'billing_first_name' => sanitize_text_field($formData['billing_first_name']),
+        'billing_last_name'  => sanitize_text_field($formData['billing_last_name']),
+        'billing_country'    => sanitize_text_field($formData['billing_country']),
+        'billing_address_1'  => sanitize_text_field($formData['billing_address_1']),
+        'billing_address_2'  => sanitize_text_field($formData['billing_address_2']),
+        'billing_city'       => sanitize_text_field($formData['billing_city']),
+        'billing_state'      => sanitize_text_field($formData['billing_state']),
+        'billing_postcode'   => sanitize_text_field($formData['billing_postcode']),
+		'billing_phone'   => sanitize_text_field($formData['billing_phone']),
+		'billing_email'   => sanitize_text_field($formData['billing_email']),
+    ];
+
+    // Get existing addresses
+    $addresses = get_user_meta($user_id, 'thwma_custom_address', true);
+    if (!is_array($addresses)) {
+        $addresses = ['billing' => [], 'default_billing' => ''];
+    }
+
+    // Generate a new address key
+    $address_key = 'address_' . (count($addresses['billing']) + 1);
+    $addresses['billing'][$address_key] = $new_address;
+
+    // Save updated address list
+    update_user_meta($user_id, 'thwma_custom_address', $addresses);
+
+    wp_send_json_success(['message' => 'Billing address added successfully!']);
 }

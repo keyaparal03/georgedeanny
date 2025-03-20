@@ -38,34 +38,57 @@ $default_billing = !empty($addresses['billing']['address_0']) ? $addresses['bill
 ?>
     <div class="billing-address-container">
         <h4>Billing Address</h4>
-		<?php if ($default_billing) : ?>
-        <div class="billing-address-box">
-            <p><?php echo esc_html($default_billing['billing_first_name'] . " " . $default_billing['billing_last_name']); ?></p>
-            <p><?php echo esc_html($default_billing['billing_address_1']); ?></p>
-            <?php if (!empty($default_billing['billing_address_2'])) : ?>
-                <p><?php echo esc_html($default_billing['billing_address_2']); ?></p>
-            <?php endif; ?>
-            <p><?php echo esc_html($default_billing['billing_city'] . ", " . $default_billing['billing_state'] . " - " . $default_billing['billing_postcode']); ?></p>
-            <p><?php echo esc_html($default_billing['billing_country']); ?></p>
-            <?php if (!empty($default_billing['billing_phone'])) : ?>
-                <p>Phone: <?php echo esc_html($default_billing['billing_phone']); ?></p>
-            <?php endif; ?>
-            <?php if (!empty($default_billing['billing_email'])) : ?>
-                <p>Email: <?php echo esc_html($default_billing['billing_email']); ?></p>
-            <?php endif; ?>
-        </div>
-        <?php endif; ?>
-        <button type="button" class="btn btn-secondary" id="openPopupBilling">Change Billing Address</button>
-
-		<!-- Shipping Address Checkbox -->
-	<div class="shipping-checkbox">
-		<input type="checkbox" id="shipToDifferentAddress">
-		<label for="shipToDifferentAddress">Shipping address diffrent than billing address</label>
-	</div>
-	<!-- Shipping Address Box (Initially Hidden) -->
-	<div class="address-box" id="shippingAddressBox" style="display: none;">
-		<button type="button" class="btn btn-secondary" id="openPopupShipping" style="display: none;">Change Shipping Address</button>
-	</div>
+		<div class="address-section">
+			<div class="billing-address-section">
+				<?php if ($default_billing) : ?>
+					<div class="billing-address-box">
+						<p><?php echo esc_html($default_billing['billing_first_name'] . " " . $default_billing['billing_last_name']); ?></p>
+						<p><?php echo esc_html($default_billing['billing_address_1']); ?></p>
+						<?php if (!empty($default_billing['billing_address_2'])) : ?>
+							<p><?php echo esc_html($default_billing['billing_address_2']); ?></p>
+						<?php endif; ?>
+						<p><?php echo esc_html($default_billing['billing_city'] . ", " . $default_billing['billing_state'] . " - " . $default_billing['billing_postcode']); ?></p>
+						<p><?php echo esc_html($default_billing['billing_country']); ?></p>
+						<?php if (!empty($default_billing['billing_phone'])) : ?>
+							<p>Phone: <?php echo esc_html($default_billing['billing_phone']); ?></p>
+						<?php endif; ?>
+						<?php if (!empty($default_billing['billing_email'])) : ?>
+							<p>Email: <?php echo esc_html($default_billing['billing_email']); ?></p>
+						<?php endif; ?>
+					</div>
+				<?php endif; ?>
+				<button type="button" class="btn btn-secondary" id="openPopupBilling">Change Billing Address</button>
+			</div>
+			<div class="shipping-address-section">
+					<!-- Shipping Address Checkbox -->
+				
+				<?php if ($default_billing) : ?>
+					<div class="billing-address-box">
+						<p><?php echo esc_html($default_billing['billing_first_name'] . " " . $default_billing['billing_last_name']); ?></p>
+						<p><?php echo esc_html($default_billing['billing_address_1']); ?></p>
+						<?php if (!empty($default_billing['billing_address_2'])) : ?>
+							<p><?php echo esc_html($default_billing['billing_address_2']); ?></p>
+						<?php endif; ?>
+						<p><?php echo esc_html($default_billing['billing_city'] . ", " . $default_billing['billing_state'] . " - " . $default_billing['billing_postcode']); ?></p>
+						<p><?php echo esc_html($default_billing['billing_country']); ?></p>
+						<?php if (!empty($default_billing['billing_phone'])) : ?>
+							<p>Phone: <?php echo esc_html($default_billing['billing_phone']); ?></p>
+						<?php endif; ?>
+						<?php if (!empty($default_billing['billing_email'])) : ?>
+							<p>Email: <?php echo esc_html($default_billing['billing_email']); ?></p>
+						<?php endif; ?>
+					</div>
+				<?php endif; ?>
+				<div class="shipping-checkbox">
+					<input type="checkbox" id="shipToDifferentAddress">
+					<label for="shipToDifferentAddress">Shipping address diffrent than billing address</label>
+				</div>
+				<!-- Shipping Address Box (Initially Hidden) -->
+				<div class="address-box" id="shippingAddressBox" style="display: none;">
+					<button type="button" class="btn btn-secondary" id="openPopupShipping" style="display: none;">Change Shipping Address</button>
+				</div>
+			</div>
+		</div>
     </div>
 
 
@@ -81,6 +104,7 @@ $default_billing = !empty($addresses['billing']['address_0']) ? $addresses['bill
     <button type="button" class="close-btn" id="closePopupShipping">&times;</button>
 
     <h5>Shipping Addresses</h5>
+	<div class="shipping-address-list">
     <?php
     $user_id = get_current_user_id();
     $addresses = get_user_meta($user_id, 'thwma_custom_address', true);
@@ -108,12 +132,60 @@ $default_billing = !empty($addresses['billing']['address_0']) ? $addresses['bill
         echo "</ul>";
     }
     ?>
+	</div>
+	 
+    <!-- Add New Address Form (Initially Hidden) -->
+    <div id="newShippingForm">
+        <button id="addNewShippingAddress" class="btn btn-primary">+ Add New Shipping Address</button>
+
+       <form id="shippingAddressForm" class="d-none">
+        <label for="shipping_first_name">First Name</label>
+        <input type="text" id="shipping_first_name" name="shipping_first_name" required>
+
+        <label for="shipping_last_name">Last Name</label>
+        <input type="text" id="shipping_last_name" name="shipping_last_name" required>
+
+        <label for="shipping_country">Country</label>
+        <select id="shipping_country" name="shipping_country" required>
+            <option value="IN">India</option>
+            <option value="US">United States</option>
+            <!-- Add more countries as needed -->
+        </select>
+
+        <label for="shipping_address_1">Address Line 1</label>
+        <input type="text" id="shipping_address_1" name="shipping_address_1" required>
+
+        <label for="shipping_address_2">Address Line 2</label>
+        <input type="text" id="shipping_address_2" name="shipping_address_2">
+
+        <label for="shipping_city">City</label>
+        <input type="text" id="shipping_city" name="shipping_city" required>
+
+        <label for="shipping_state">State</label>
+        <input type="text" id="shipping_state" name="shipping_state" required>
+
+        <label for="shipping_postcode">Postcode</label>
+        <input type="text" id="shipping_postcode" name="shipping_postcode" required>
+		<!-- New Phone Field -->
+		<label for="shipping_phone">Phone</label>
+		<input type="text" id="shipping_phone" name="shipping_phone" required>
+
+		<!-- New Email Field -->
+		<label for="shipping_email">Email</label>
+		<input type="email" id="shipping_email" name="shipping_email" required>
+
+        <button type="submit" class="btn btn-success">Save Address</button>
+		</form> 
+	
+	
+    </div>
 </div>
 
 <!-- Hidden Popup inside Modal -->
 <div id="popupContentBilling" class="d-none">
 	<button type="button" class="close-btn" id="closePopupBilling">&times;</button>
     <h5>Billing Addresses</h5>
+	<div class="billing-address-list">
 	<?php
 		$user_id = get_current_user_id();
 		$addresses = get_user_meta($user_id, 'thwma_custom_address', true);
@@ -151,48 +223,55 @@ $default_billing = !empty($addresses['billing']['address_0']) ? $addresses['bill
 			}
 		}
 	?>
-     <!-- Add New Billing Address Button -->
-     <button id="addNewBillingAddress" class="btn btn-primary">+ Add New Billing Address</button>
-
+    </div>
     <!-- Add New Address Form (Initially Hidden) -->
     <div id="newBillingForm">
-        
-    </div>
-</div>
-<div id="">
-       <form id="shippingAddressForm">
-        <label for="shipping_first_name">First Name</label>
-        <input type="text" id="shipping_first_name" name="shipping_first_name" required>
+         <!-- Add New Billing Address Button -->
+     	<button id="addNewBillingAddress" class="btn btn-primary">+ Add New Billing Address</button>
 
-        <label for="shipping_last_name">Last Name</label>
-        <input type="text" id="shipping_last_name" name="shipping_last_name" required>
+       <form id="billingAddressForm" class="d-none">
+        <label for="billing_first_name">First Name</label>
+        <input type="text" id="billing_first_name" name="billing_first_name" required>
 
-        <label for="shipping_country">Country</label>
-        <select id="shipping_country" name="shipping_country" required>
+        <label for="billing_last_name">Last Name</label>
+        <input type="text" id="billing_last_name" name="billing_last_name" required>
+
+        <label for="billing_country">Country</label>
+        <select id="billing_country" name="billing_country" required>
             <option value="IN">India</option>
             <option value="US">United States</option>
             <!-- Add more countries as needed -->
         </select>
 
-        <label for="shipping_address_1">Address Line 1</label>
-        <input type="text" id="shipping_address_1" name="shipping_address_1" required>
+        <label for="billing_address_1">Address Line 1</label>
+        <input type="text" id="billing_address_1" name="billing_address_1" required>
 
-        <label for="shipping_address_2">Address Line 2</label>
-        <input type="text" id="shipping_address_2" name="shipping_address_2">
+        <label for="billing_address_2">Address Line 2</label>
+        <input type="text" id="billing_address_2" name="billing_address_2">
 
-        <label for="shipping_city">City</label>
-        <input type="text" id="shipping_city" name="shipping_city" required>
+        <label for="billing_city">City</label>
+        <input type="text" id="billing_city" name="billing_city" required>
 
-        <label for="shipping_state">State</label>
-        <input type="text" id="shipping_state" name="shipping_state" required>
+        <label for="billing_state">State</label>
+        <input type="text" id="billing_state" name="billing_state" required>
 
-        <label for="shipping_postcode">Postcode</label>
-        <input type="text" id="shipping_postcode" name="shipping_postcode" required>
+        <label for="billing_postcode">Postcode</label>
+        <input type="text" id="billing_postcode" name="billing_postcode" required>
+		<!-- New Phone Field -->
+		<label for="billing_phone">Phone</label>
+		<input type="text" id="billing_phone" name="billing_phone" required>
+
+		<!-- New Email Field -->
+		<label for="billing_email">Email</label>
+		<input type="email" id="billing_email" name="billing_email" required>
 
         <button type="submit" class="btn btn-success">Save Address</button>
-    </form> 
-   
+		</form> 
+	
+	
+    </div>
 </div>
+
 <form name="checkout" method="post" class="checkout woocommerce-checkout" action="<?php echo esc_url( wc_get_checkout_url() ); ?>" enctype="multipart/form-data" aria-label="<?php echo esc_attr__( 'Checkout', 'woocommerce' ); ?>">
 
 	<?php if ( $checkout->get_checkout_fields() ) : ?>
@@ -246,6 +325,12 @@ jQuery(document).ready(function($) {
     $("#closePopupBilling").click(function() {
         $("#popupContentBilling").fadeOut();
     });
+	$("#addNewShippingAddress").click(function(){
+		$("#shippingAddressForm").fadeIn();
+	})
+	$("#addNewBillingAddress").click(function(){
+		$("#billingAddressForm").fadeIn();
+	})
 });
 </script>
 <script>
@@ -283,6 +368,31 @@ jQuery(document).ready(function($) {
                 alert(response.message);
                 if (response.success) {
                    // $("#popupContentShipping").fadeOut(); // Close popup on success
+                }
+            },
+            error: function() {
+                alert("Error saving address. Please try again.");
+            }
+        });
+    });
+
+	 $("#billingAddressForm").submit(function(e) {
+        e.preventDefault();
+
+        var formData = $(this).serialize(); // Serialize form data
+
+        $.ajax({
+            type: "POST",
+            url: my_ajax_object.ajax_url, // From wp_localize_script
+            data: {
+                action: "save_user_billing_address",
+                nonce: my_ajax_object.nonce,
+                formData: formData
+            },
+            success: function(response) {
+                alert(response.message);
+                if (response.success) {
+                   // $("#popupContentbilling").fadeOut(); // Close popup on success
                 }
             },
             error: function() {
@@ -385,10 +495,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    document.getElementById("addNewBillingAddress").addEventListener("click", function () {
-        document.getElementById("newBillingForm").classList.remove("d-none");
-    });
-
 
     // Close popups when clicking outside
     document.addEventListener("click", function (event) {
@@ -481,21 +587,22 @@ button#closePopupShipping,button#closePopupBilling {
     font-size: 39px;
 }
 .billing-address-container {
-    background: #f8f8f8;
+    /* background: #ccc; */
     padding: 15px;
     border-radius: 8px;
     border: 1px solid #ddd;
-    max-width: 600px;
+    max-width: 100%;
     margin-bottom: 20px;
 }
 
 .billing-address-box {
-    background: #e8f5e9;
+    background: #ccc;
     padding: 10px;
     border-radius: 6px;
-    border-left: 4px solid #4CAF50;
+	
+    /* border-left: 4px solid #4CAF50; */
     font-size: 14px;
-    color: #333;
+    color: #000;
 }
 
 .btn-secondary {
@@ -532,5 +639,18 @@ button#closePopupShipping,button#closePopupBilling {
 }
 .d-none{
     display: none;
+}
+div#newBillingForm,div##newShippingForm {
+    display: inline-block;
+}
+.shipping-address-list,.billing-address-list{
+	display:flex;
+}
+.address-section{
+	display:flex;
+}
+.billing-address-section,.shipping-address-section {
+    width: 43%;
+    margin: 10px;
 }
 </style>
