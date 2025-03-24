@@ -18,7 +18,8 @@ function enqueue_custom_scripts() {
     // Localize script to pass AJAX URL and nonce
     wp_localize_script('jquery', 'my_ajax_object', array(
         'ajax_url' => admin_url('admin-ajax.php'),
-        'nonce' => wp_create_nonce('billing_nonce')
+        'nonce' => wp_create_nonce('billing_nonce'),
+        'get_states_nonce'=> wp_create_nonce('get_states_nonce'),
     ));
 
     // Add inline script to ensure `my_ajax_object` is available
@@ -26,7 +27,8 @@ function enqueue_custom_scripts() {
         echo '<script type="text/javascript">
             var my_ajax_object = ' . json_encode(array(
                 'ajax_url' => admin_url('admin-ajax.php'),
-                'nonce' => wp_create_nonce('billing_nonce')
+                'nonce' => wp_create_nonce('billing_nonce'),
+                'get_states_nonce'=> wp_create_nonce('get_states_nonce')
             )) . ';
         </script>';
     });
@@ -128,3 +130,37 @@ function save_user_billing_address() {
 
     wp_send_json_success(['message' => 'Billing address added successfully!']);
 }
+
+function get_states_by_country() {
+    if (!isset($_POST['security']) || !wp_verify_nonce($_POST['security'], 'get_states_nonce')) {
+        wp_send_json_error(['message' => 'Nonce verification failed'], 403);
+        exit;
+    }
+
+    if (!isset($_POST['country_code'])) {
+        wp_send_json_error(['message' => 'Invalid request'], 400);
+        exit;
+    }
+
+    $country_code = sanitize_text_field($_POST['country_code']);
+    $states = WC()->countries->get_states($country_code);
+
+    if (!empty($states)) {
+        //print_r($states);
+        // Transform array to include both key and value
+        $formatted_states = [];
+        foreach ($states as $code => $name) {
+            $formatted_states[] = [
+                'code' => $code,
+                'name' => $name
+            ];
+        }
+        wp_send_json_success($formatted_states);
+    } else {
+        wp_send_json_error(['message' => 'No states found']);
+    }
+}
+add_action('wp_ajax_get_states', 'get_states_by_country');
+add_action('wp_ajax_nopriv_get_states', 'get_states_by_country'); // Allow guest users
+
+

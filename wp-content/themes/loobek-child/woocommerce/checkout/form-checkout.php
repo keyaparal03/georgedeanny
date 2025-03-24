@@ -27,6 +27,14 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 	return;
 }
 
+// Get WooCommerce Countries
+$wc_countries = new WC_Countries();
+$billing_countries = $wc_countries->get_allowed_countries();
+$shipping_countries = $wc_countries->get_shipping_countries();
+$billing_states = $wc_countries->get_states();
+$shipping_states = $wc_countries->get_states();
+
+
 ?>
 
 <?php
@@ -133,46 +141,57 @@ $default_billing = !empty($addresses['billing']['address_0']) ? $addresses['bill
     }
     ?>
 	</div>
+    <br/>
+	<button id="addNewShippingAddress" class="btn btn-primary">+ Add New Shipping Address</button>
+
+</div>
+
+<!-- Hidden Popup inside Modal -->
+<div id="popupNewShippingForm" class="d-none position-relative">
+    <!-- Close Button -->
+    <button type="button" class="close-btn" id="closePopupShippingForm">&times;</button>
+
+    <h5>Add Shipping Addresses</h5>
 	 
     <!-- Add New Address Form (Initially Hidden) -->
     <div id="newShippingForm">
-        <button id="addNewShippingAddress" class="btn btn-primary">+ Add New Shipping Address</button>
-
-       <form id="shippingAddressForm" class="d-none">
+       <form id="shippingAddressForm">
         <label for="shipping_first_name">First Name</label>
-        <input type="text" id="shipping_first_name" name="shipping_first_name" required>
+        <input type="text" name="shipping_first_name" required>
 
         <label for="shipping_last_name">Last Name</label>
-        <input type="text" id="shipping_last_name" name="shipping_last_name" required>
+        <input type="text" name="shipping_last_name" required>
 
         <label for="shipping_country">Country</label>
-        <select id="shipping_country" name="shipping_country" required>
-            <option value="IN">India</option>
-            <option value="US">United States</option>
-            <!-- Add more countries as needed -->
+        <select id="shipping_country2" name="shipping_country">
+            <?php foreach ($shipping_countries as $code => $name) : ?>
+                <option value="<?php echo esc_attr($code); ?>"><?php echo esc_html($name); ?></option>
+            <?php endforeach; ?>
         </select>
 
         <label for="shipping_address_1">Address Line 1</label>
-        <input type="text" id="shipping_address_1" name="shipping_address_1" required>
+        <input type="text" name="shipping_address_1" required>
 
         <label for="shipping_address_2">Address Line 2</label>
-        <input type="text" id="shipping_address_2" name="shipping_address_2">
+        <input type="text" name="shipping_address_2">
 
         <label for="shipping_city">City</label>
-        <input type="text" id="shipping_city" name="shipping_city" required>
+        <input type="text" name="shipping_city" required>
 
-        <label for="shipping_state">State</label>
-        <input type="text" id="shipping_state" name="shipping_state" required>
+        <label for="shipping_state1">State</label>
+        <select id="shipping_state1" name="shipping_state">
+        <!-- States will be dynamically populated via JavaScript -->
+        </select>
 
         <label for="shipping_postcode">Postcode</label>
-        <input type="text" id="shipping_postcode" name="shipping_postcode" required>
+        <input type="text" name="shipping_postcode" required>
 		<!-- New Phone Field -->
 		<label for="shipping_phone">Phone</label>
-		<input type="text" id="shipping_phone" name="shipping_phone" required>
+		<input type="text" name="shipping_phone" required>
 
 		<!-- New Email Field -->
 		<label for="shipping_email">Email</label>
-		<input type="email" id="shipping_email" name="shipping_email" required>
+		<input type="email" name="shipping_email" required>
 
         <button type="submit" class="btn btn-success">Save Address</button>
 		</form> 
@@ -180,7 +199,6 @@ $default_billing = !empty($addresses['billing']['address_0']) ? $addresses['bill
 	
     </div>
 </div>
-
 <!-- Hidden Popup inside Modal -->
 <div id="popupContentBilling" class="d-none">
 	<button type="button" class="close-btn" id="closePopupBilling">&times;</button>
@@ -224,46 +242,51 @@ $default_billing = !empty($addresses['billing']['address_0']) ? $addresses['bill
 		}
 	?>
     </div>
+    <button id="addNewBillingAddress" class="btn btn-primary">+ Add New Billing Address</button>
+</div>
+
+<div id="popupNewBillingForm" class="d-none">
+	<button type="button" class="close-btn" id="closePopupBillingForm">&times;</button>
+    <h5>New Billing Addresses</h5>
     <!-- Add New Address Form (Initially Hidden) -->
     <div id="newBillingForm">
-         <!-- Add New Billing Address Button -->
-     	<button id="addNewBillingAddress" class="btn btn-primary">+ Add New Billing Address</button>
-
-       <form id="billingAddressForm" class="d-none">
+       <form id="billingAddressForm">
         <label for="billing_first_name">First Name</label>
-        <input type="text" id="billing_first_name" name="billing_first_name" required>
+        <input type="text" name="billing_first_name" required>
 
         <label for="billing_last_name">Last Name</label>
-        <input type="text" id="billing_last_name" name="billing_last_name" required>
+        <input type="text" name="billing_last_name" required>
 
         <label for="billing_country">Country</label>
-        <select id="billing_country" name="billing_country" required>
-            <option value="IN">India</option>
-            <option value="US">United States</option>
-            <!-- Add more countries as needed -->
+        <select id="billing_country1" name="billing_country">
+            <?php foreach ($billing_countries as $code => $name) : ?>
+                <option value="<?php echo esc_attr($code); ?>"><?php echo esc_html($name); ?></option>
+            <?php endforeach; ?>
         </select>
 
         <label for="billing_address_1">Address Line 1</label>
-        <input type="text" id="billing_address_1" name="billing_address_1" required>
+        <input type="text" name="billing_address_1" required>
 
         <label for="billing_address_2">Address Line 2</label>
-        <input type="text" id="billing_address_2" name="billing_address_2">
+        <input type="text" name="billing_address_2">
 
         <label for="billing_city">City</label>
-        <input type="text" id="billing_city" name="billing_city" required>
+        <input type="text" name="billing_city" required>
 
         <label for="billing_state">State</label>
-        <input type="text" id="billing_state" name="billing_state" required>
+        <select id="billing_state1" name="billing_state">
+            <!-- States will be dynamically populated via JavaScript -->
+        </select>
 
         <label for="billing_postcode">Postcode</label>
-        <input type="text" id="billing_postcode" name="billing_postcode" required>
+        <input type="text" name="billing_postcode" required>
 		<!-- New Phone Field -->
 		<label for="billing_phone">Phone</label>
-		<input type="text" id="billing_phone" name="billing_phone" required>
+		<input type="text" name="billing_phone" required>
 
 		<!-- New Email Field -->
 		<label for="billing_email">Email</label>
-		<input type="email" id="billing_email" name="billing_email" required>
+		<input type="email" name="billing_email" required>
 
         <button type="submit" class="btn btn-success">Save Address</button>
 		</form> 
@@ -317,91 +340,30 @@ jQuery(document).ready(function($) {
     $("#closePopupShipping").click(function() {
         $("#popupContentShipping").fadeOut();
     });
+    $("#closePopupBilling").click(function() {
+        $("#popupContentBilling").fadeOut();
+    });
+
+    $("#closePopupShippingForm").click(function() {
+        $("#popupNewShippingForm").fadeOut();
+    });
+    $("#closePopupBillingForm").click(function() {
+        $("#popupNewBillingForm").fadeOut();
+    });
 
 	$("#openPopupBilling").click(function() {
         $("#popupContentBilling").removeClass("d-none").hide().fadeIn();
     });
 
-    $("#closePopupBilling").click(function() {
-        $("#popupContentBilling").fadeOut();
-    });
+    
 	$("#addNewShippingAddress").click(function(){
-		$("#shippingAddressForm").fadeIn();
+        $("#popupContentShipping").fadeOut();
+		$("#popupNewShippingForm").fadeIn();
 	})
 	$("#addNewBillingAddress").click(function(){
-		$("#billingAddressForm").fadeIn();
-	})
-});
-</script>
-<script>
-jQuery(document).ready(function($) {
-    $("#openPopupShipping").click(function() {
-        $("#popupContentShipping").removeClass("d-none").hide().fadeIn();
-    });
-
-    $("#closePopupShipping").click(function() {
-        $("#popupContentShipping").fadeOut();
-    });
-
-	$("#openPopupBilling").click(function() {
-        $("#popupContentBilling").removeClass("d-none").hide().fadeIn();
-    });
-
-    $("#closePopupBilling").click(function() {
         $("#popupContentBilling").fadeOut();
-    });
-	  // Handle form submission via AJAX
-    $("#shippingAddressForm").submit(function(e) {
-        e.preventDefault();
-
-        var formData = $(this).serialize(); // Serialize form data
-
-        $.ajax({
-            type: "POST",
-            url: my_ajax_object.ajax_url, // From wp_localize_script
-            data: {
-                action: "save_user_shipping_address",
-                nonce: my_ajax_object.nonce,
-                formData: formData
-            },
-            success: function(response) {
-                alert(response.message);
-                if (response.success) {
-                   // $("#popupContentShipping").fadeOut(); // Close popup on success
-                }
-            },
-            error: function() {
-                alert("Error saving address. Please try again.");
-            }
-        });
-    });
-
-	 $("#billingAddressForm").submit(function(e) {
-        e.preventDefault();
-
-        var formData = $(this).serialize(); // Serialize form data
-
-        $.ajax({
-            type: "POST",
-            url: my_ajax_object.ajax_url, // From wp_localize_script
-            data: {
-                action: "save_user_billing_address",
-                nonce: my_ajax_object.nonce,
-                formData: formData
-            },
-            success: function(response) {
-                alert(response.message);
-                if (response.success) {
-                   // $("#popupContentbilling").fadeOut(); // Close popup on success
-                }
-            },
-            error: function() {
-                alert("Error saving address. Please try again.");
-            }
-        });
-    });
-
-	
+		$("#popupNewBillingForm").fadeIn();
+	})
 });
 </script>
 <script>
@@ -409,6 +371,7 @@ jQuery(document).ready(function($) {
 document.querySelectorAll(".select-shipping").forEach(function(element) {
         element.addEventListener("click", function() {
             let shipping = JSON.parse(this.getAttribute("data-shipping"));
+            console.log(shipping.shipping_state);
 
             // Populate WooCommerce Shipping Fields
             document.getElementById("shipping_first_name").value = shipping.shipping_first_name;
@@ -419,7 +382,7 @@ document.querySelectorAll(".select-shipping").forEach(function(element) {
             document.getElementById("shipping_state").value = shipping.shipping_state;
             document.getElementById("shipping_postcode").value = shipping.shipping_postcode;
             document.getElementById("shipping_country").value = shipping.shipping_country;
-
+            alert(document.getElementById("shipping_state").value);
             // Highlight the selected shipping address
             document.querySelectorAll(".select-shipping").forEach(el => el.style.backgroundColor = "");
             this.style.backgroundColor = "#d0f0d0"; // Light green for selected address
@@ -431,7 +394,11 @@ document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll(".select-billing").forEach(function(element) {
         element.addEventListener("click", function() {
             let billing = JSON.parse(this.getAttribute("data-billing"));
+            console.log(billing.billing_state);
+            document.getElementById("billing_state").value = billing.billing_state;
 
+           // Manually trigger the change event
+            document.getElementById("billing_state").dispatchEvent(new Event("change"));
             // Populate WooCommerce Billing Fields
             document.getElementById("billing_first_name").value = billing.billing_first_name;
             document.getElementById("billing_last_name").value = billing.billing_last_name;
@@ -536,11 +503,104 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById("popupContentBilling").classList.add("d-none");
     });
 });
+jQuery(document).ready(function ($)  {
+    $("#shipping_country2").change(function () {
+        let countryCode = $(this).val();
+        // ✅ Validate that a country is selected
+        if (!countryCode) {
+            alert("Please select a country before choosing a state.");
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url: my_ajax_object.ajax_url,
+            data: {
+                action: "get_states",
+                security: my_ajax_object.get_states_nonce,
+                country_code: countryCode
+            },
+            beforeSend: function () {
+                // ✅ Show a loading message (optional)
+                $("#shipping_state1").html('<option value="">Loading states...</option>');
+            },
+            success: function (response) {
+                if (response.success) {
+                    console.log(response);
+                    let states = response.data;
+                    let stateDropdown = $("#shipping_state1");
+
+                    // Clear previous states
+                    stateDropdown.empty();
+                    stateDropdown.append('<option value="">Select State</option>');
+
+                    // Append new state options
+                    $.each(states, function (index, state) {
+                        stateDropdown.append(`<option value="${state.code}">${state.name}</option>`);
+                    });
+
+                    // Trigger change event
+                    stateDropdown.trigger("change");
+                } else {
+                    console.error("Error: No states found");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX Error:", xhr.responseText);
+            }
+        });
+    });
+    $("#billing_country1").change(function () {
+       
+        let countryCode = $(this).val();
+        // ✅ Validate that a country is selected
+        if (!countryCode) {
+            alert("Please select a country before choosing a state.");
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url: my_ajax_object.ajax_url,
+            data: {
+                action: "get_states",
+                security: my_ajax_object.get_states_nonce,
+                country_code: countryCode
+            },
+            beforeSend: function () {
+                // ✅ Show a loading message (optional)
+                $("#billing_state1").html('<option value="">Loading states...</option>');
+            },
+            success: function (response) {
+                if (response.success) {
+                    let states = response.data;
+                    let stateDropdown = $("#billing_state1");
+
+                    // Clear previous states
+                    stateDropdown.empty();
+                    stateDropdown.append('<option value="">Select State</option>');
+
+                    // Append new state options
+                    $.each(states, function (index, state) {
+                        stateDropdown.append(`<option value="${state.code}">${state.name}</option>`);
+                    });
+
+                    // Trigger change event
+                    stateDropdown.trigger("change");
+                } else {
+                    console.error("Error: No states found");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX Error:", xhr.responseText);
+            }
+        });
+    });
+
+});
 
 </script>
 <style>
 /* Styles for the popup inside the modal */
-#popupContentShipping, #popupContentBilling {
+#popupContentShipping, #popupContentBilling, #popupNewBillingForm, #popupNewShippingForm {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -577,7 +637,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	width: 200px;
 	list-style: none;
 }
-button#closePopupShipping,button#closePopupBilling {
+button#closePopupShipping, button#closePopupBilling, button#closePopupShippingForm, button#closePopupBillingForm {
     right: 0px !important;
 	top: 0px !important;
     position: fixed;
@@ -653,4 +713,12 @@ div#newBillingForm,div##newShippingForm {
     width: 43%;
     margin: 10px;
 }
+#newShippingForm, #newBillingForm {
+    text-align: left;
+}
+select#shipping_country ,select#billing_country{
+    max-width: 100%;
+    margin-bottom: 10px;
+}
+
 </style>
