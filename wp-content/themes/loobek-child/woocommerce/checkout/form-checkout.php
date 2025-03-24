@@ -302,11 +302,11 @@ $default_billing = !empty($addresses['billing']['address_0']) ? $addresses['bill
 		<?php do_action( 'woocommerce_checkout_before_customer_details' ); ?>
 
 		<div class="col2-set" id="customer_details">
-			<div class="col-1">
+			<div class="col-1" style="display:none;">
 				<?php do_action( 'woocommerce_checkout_billing' ); ?>
 			</div>
 
-			<div class="col-2">
+			<div class="col-2" style="display:none;">
 				<?php do_action( 'woocommerce_checkout_shipping' ); ?>
 			</div>
 		</div>
@@ -630,58 +630,101 @@ jQuery(document).ready(function ($)  {
                     if (response.success) {
                         if(popupId=='popupNewBillingForm')
                         {
+                            
                             // Convert URL-encoded string to an object
                             let params = new URLSearchParams(formData);
 
-                            // Extract values
-                            let billingFirstName = params.get("billing_first_name");
-                            let billingLastName = params.get("billing_last_name");
-                            let billingCountry = params.get("billing_country");
-                            let billingAddress1 = params.get("billing_address_1");
-                            let billingAddress2 = params.get("billing_address_2");
-                            let billingCity = params.get("billing_city");
-                            let billingState = params.get("billing_state");
-                            let billingPostcode = params.get("billing_postcode");
-                            let billingPhone = params.get("billing_phone");
-                            let billingEmail = params.get("billing_email");
+                            let billingForm_1 = document.getElementById("billingAddressForm");
+
+                            // Get input values from the form
+                            let billingFirstName_1 = billingForm_1.querySelector("input[name='billing_first_name']").value;
+                            let billingLastName_1 = billingForm_1.querySelector("input[name='billing_last_name']").value;
+                            let billingCountry_1 = billingForm_1.querySelector("select[name='billing_country']").value;
+                            let billingAddress1_1 = billingForm_1.querySelector("input[name='billing_address_1']").value;
+                            let billingAddress2_1 = billingForm_1.querySelector("input[name='billing_address_2']").value;
+                            let billingCity_1 = billingForm_1.querySelector("input[name='billing_city']").value;
+                            let billingState_1 = billingForm_1.querySelector("select[name='billing_state']").value;
+                            let billingPostcode_1 = billingForm_1.querySelector("input[name='billing_postcode']").value;
+                            let billingPhone_1 = billingForm_1.querySelector("input[name='billing_phone']").value;
+                            let billingEmail_1 = billingForm_1.querySelector("input[name='billing_email']").value;
                             // Create new list item
-                            let listItem = `<li class='select-billing address_custom_li' data-billing='${JSON.stringify(params)}'>
-                                ${billingFirstName} ${billingLastName}<br>
-                                ${billingAddress1}<br>
-                                ${billingAddress2 ? billingAddress2 + "<br>" : ""}
-                                ${billingCity}, ${billingState} - ${billingPostcode}<br>
-                                ${billingCountry}<br>
-                                ${billingPhone ? "Phone: " + billingPhone + "<br>" : ""}
-                                ${billingEmail ? "Email: " + billingEmail + "<br>" : ""}
+
+
+                           
+                            let billingData = {
+                                "billing_first_name": billingFirstName_1,
+                                "billing_last_name": billingLastName_1,
+                                "billing_country": billingCountry_1,
+                                "billing_address_1": billingAddress1_1,
+                                "billing_address_2": billingAddress2_1,
+                                "billing_city": billingCity_1,
+                                "billing_state": billingState_1,
+                                "billing_postcode": billingPostcode_1,
+                                "billing_phone": billingPhone_1,
+                                "billing_email": billingEmail_1
+                            };
+                            let listItem = `<li class='select-billing address_custom_li' data-billing='${JSON.stringify(billingData)}'>
+                                ${billingFirstName_1} ${billingLastName_1}<br>
+                                ${billingAddress1_1}<br>
+                                ${billingAddress2_1 ? billingAddress2_1 + "<br>" : ""}
+                                ${billingCity_1}, ${billingState_1} - ${billingPostcode_1}<br>
+                                ${billingCountry_1}<br>
+                                ${billingPhone_1 ? "Phone: " + billingPhone_1 + "<br>" : ""}
+                                ${billingEmail_1 ? "Email: " + billingEmail_1 + "<br>" : ""}
                             </li>`;
 
-                            $(".billing-address-list ul").append(listItem); // Append new address to the list
-                            $("#popupContentShipping").fadeIn();
+                            if (billingForm_1) {
+                                billingForm_1.reset();
+                            }
 
+                            $(".billing-address-list ul").append(listItem); // Append new address to the list
+                            $("#popupContentBilling").fadeIn();
+                           
                         }else{
                             // Convert URL-encoded string to an object
                             let params = new URLSearchParams(formData);
 
-                            // Extract values
-                            let shippingFirstName = params.get("shipping_first_name");
-                            let shippingLastName = params.get("shipping_last_name");
-                            let shippingCountry = params.get("shipping_country");
-                            let shippingAddress1 = params.get("shipping_address_1");
-                            let shippingAddress2 = params.get("shipping_address_2");
-                            let shippingCity = params.get("shipping_city");
-                            let shippingState = params.get("shipping_state");
-                            let shippingPostcode = params.get("shipping_postcode");
-                            let shippingPhone = params.get("shipping_phone");
-                            let shippingEmail = params.get("shipping_email");
+                            let shippingForm_1 = document.getElementById("shippingAddressForm");
+
+                            // Get input values from the form
+                            let shippingFirstName_1 = shippingForm_1.querySelector("input[name='shipping_first_name']").value;
+                            let shippingLastName_1 = shippingForm_1.querySelector("input[name='shipping_last_name']").value;
+                            let shippingCountry_1 = shippingForm_1.querySelector("select[name='shipping_country']").value;
+                            let shippingAddress1_1 = shippingForm_1.querySelector("input[name='shipping_address_1']").value;
+                            let shippingAddress2_1 = shippingForm_1.querySelector("input[name='shipping_address_2']").value;
+                            let shippingCity_1 = shippingForm_1.querySelector("input[name='shipping_city']").value;
+                            let shippingState_1 = shippingForm_1.querySelector("select[name='shipping_state']").value;
+                            let shippingPostcode_1 = shippingForm_1.querySelector("input[name='shipping_postcode']").value;
+                            let shippingPhone_1 = shippingForm_1.querySelector("input[name='shipping_phone']").value;
+                            let shippingEmail_1 = shippingForm_1.querySelector("input[name='shipping_email']").value;
                             // Create new list item
-                            let listItem = `<li class='select-shipping address_custom_li' data-shipping='${JSON.stringify(params)}'>
-                                ${shippingFirstName} ${shippingLastName}<br>
-                                ${shippingAddress1}<br>
-                                ${shippingAddress2 ? shippingAddress2 + "<br>" : ""}
-                                ${shippingCity}, ${shippingState} - ${shippingPostcode}<br>
-                                ${shippingCountry}<br>
-                                ${shippingPhone ? "Phone: " + shippingPhone + "<br>" : ""}
-                                ${shippingEmail ? "Email: " + shippingEmail + "<br>" : ""}
+
+
+                            if (shippingForm_1) {
+                                shippingForm_1.reset();
+                            }
+
+                            let billingData = {
+                                "shipping_first_name": shippingFirstName_1,
+                                "shipping_last_name": shippingLastName_1,
+                                "shipping_country": shippingCountry_1,
+                                "shipping_address_1": shippingAddress1_1,
+                                "shipping_address_2": shippingAddress2_1,
+                                "shipping_city": shippingCity_1,
+                                "shipping_state": shippingState_1,
+                                "shipping_postcode": shippingPostcode_1,
+                                "shipping_phone": shippingPhone_1,
+                                "shipping_email": shippingEmail_1
+                            };
+
+                            let listItem = `<li class='select-shipping address_custom_li' data-shipping='${JSON.stringify(billingData)}'>
+                                ${shippingFirstName_1} ${shippingLastName_1}<br>
+                                ${shippingAddress1_1}<br>
+                                ${shippingAddress2_1 ? shippingAddress2_1 + "<br>" : ""}
+                                ${shippingCity_1}, ${shippingState_1} - ${shippingPostcode_1}<br>
+                                ${shippingCountry_1}<br>
+                                ${shippingPhone_1 ? "Phone: " + shippingPhone_1 + "<br>" : ""}
+                                ${shippingEmail_1 ? "Email: " + shippingEmail_1 + "<br>" : ""}
                             </li>`;
 
                             $(".shipping-address-list ul").append(listItem); // Append new address to the list
