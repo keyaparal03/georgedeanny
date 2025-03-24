@@ -549,6 +549,8 @@ jQuery(document).ready(function ($)  {
             }
         });
     });
+   
+   
     $("#billing_country1").change(function () {
        
         let countryCode = $(this).val();
@@ -594,6 +596,112 @@ jQuery(document).ready(function ($)  {
             }
         });
     });
+
+    function handleFormSubmission(formId, action, popupId) {
+        $(formId).submit(function (e) {
+            e.preventDefault();
+
+            var formData = $(this).serialize(); // Serialize form data
+
+
+            
+
+            // console.log("First Name:", billingFirstName);
+            // console.log("Last Name:", billingLastName);
+            // console.log("Country:", billingCountry);
+            // console.log("Address 1:", billingAddress1);
+            // console.log("Address 2:", billingAddress2);
+            // console.log("City:", billingCity);
+            // console.log("State:", billingState);
+            // console.log("Postcode:", billingPostcode);
+            // console.log("Phone:", billingPhone);
+            // console.log("Email:", billingEmail);
+
+            $.ajax({
+                type: "POST",
+                url: my_ajax_object.ajax_url, // From wp_localize_script
+                data: {
+                    action: action, // Dynamic action for billing or shipping
+                    nonce: my_ajax_object.nonce,
+                    formData: formData
+                },
+                success: function (response) {
+                    console.log(formData);
+                    if (response.success) {
+                        if(popupId=='popupNewBillingForm')
+                        {
+                            // Convert URL-encoded string to an object
+                            let params = new URLSearchParams(formData);
+
+                            // Extract values
+                            let billingFirstName = params.get("billing_first_name");
+                            let billingLastName = params.get("billing_last_name");
+                            let billingCountry = params.get("billing_country");
+                            let billingAddress1 = params.get("billing_address_1");
+                            let billingAddress2 = params.get("billing_address_2");
+                            let billingCity = params.get("billing_city");
+                            let billingState = params.get("billing_state");
+                            let billingPostcode = params.get("billing_postcode");
+                            let billingPhone = params.get("billing_phone");
+                            let billingEmail = params.get("billing_email");
+                            // Create new list item
+                            let listItem = `<li class='select-billing address_custom_li' data-billing='${JSON.stringify(params)}'>
+                                ${billingFirstName} ${billingLastName}<br>
+                                ${billingAddress1}<br>
+                                ${billingAddress2 ? billingAddress2 + "<br>" : ""}
+                                ${billingCity}, ${billingState} - ${billingPostcode}<br>
+                                ${billingCountry}<br>
+                                ${billingPhone ? "Phone: " + billingPhone + "<br>" : ""}
+                                ${billingEmail ? "Email: " + billingEmail + "<br>" : ""}
+                            </li>`;
+
+                            $(".billing-address-list ul").append(listItem); // Append new address to the list
+                            $("#popupContentShipping").fadeIn();
+
+                        }else{
+                            // Convert URL-encoded string to an object
+                            let params = new URLSearchParams(formData);
+
+                            // Extract values
+                            let shippingFirstName = params.get("shipping_first_name");
+                            let shippingLastName = params.get("shipping_last_name");
+                            let shippingCountry = params.get("shipping_country");
+                            let shippingAddress1 = params.get("shipping_address_1");
+                            let shippingAddress2 = params.get("shipping_address_2");
+                            let shippingCity = params.get("shipping_city");
+                            let shippingState = params.get("shipping_state");
+                            let shippingPostcode = params.get("shipping_postcode");
+                            let shippingPhone = params.get("shipping_phone");
+                            let shippingEmail = params.get("shipping_email");
+                            // Create new list item
+                            let listItem = `<li class='select-shipping address_custom_li' data-shipping='${JSON.stringify(params)}'>
+                                ${shippingFirstName} ${shippingLastName}<br>
+                                ${shippingAddress1}<br>
+                                ${shippingAddress2 ? shippingAddress2 + "<br>" : ""}
+                                ${shippingCity}, ${shippingState} - ${shippingPostcode}<br>
+                                ${shippingCountry}<br>
+                                ${shippingPhone ? "Phone: " + shippingPhone + "<br>" : ""}
+                                ${shippingEmail ? "Email: " + shippingEmail + "<br>" : ""}
+                            </li>`;
+
+                            $(".shipping-address-list ul").append(listItem); // Append new address to the list
+                            $("#popupContentShipping").fadeIn();
+                        }
+                    
+
+                    $(popupId).fadeOut(); // Close popup on success
+                    }
+                },
+                error: function () {
+                    alert("Error saving address. Please try again.");
+                }
+            });
+        });
+    }
+
+    // ✅ Initialize for Shipping & Billing Forms
+    handleFormSubmission("#shippingAddressForm", "save_user_shipping_address", "#popupNewShippingForm");
+    handleFormSubmission("#billingAddressForm", "save_user_billing_address", "#popupNewBillingForm");
 
 });
 
