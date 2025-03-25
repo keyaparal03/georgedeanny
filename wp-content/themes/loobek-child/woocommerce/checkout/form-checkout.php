@@ -70,10 +70,9 @@ $default_billing = !empty($addresses['billing']['address_0']) ? $addresses['bill
 				<button type="button" class="btn btn-secondary" id="openPopupBilling">Change Billing Address</button>
 			</div>
 			<div class="shipping-address-section">
-					<!-- Shipping Address Checkbox -->
                 <h4>Shipping Address</h4>
 				<?php if ($default_billing) : ?>
-					<div id="shipping-address-box" class="billing-address-box">
+					<div class="billing-address-box" id="shipping-address-box">
 						<p><?php echo esc_html($default_billing['billing_first_name'] . " " . $default_billing['billing_last_name']); ?></p>
 						<p><?php echo esc_html($default_billing['billing_address_1']); ?></p>
 						<?php if (!empty($default_billing['billing_address_2'])) : ?>
