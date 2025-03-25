@@ -45,11 +45,12 @@ $default_billing = !empty($addresses['billing']['address_0']) ? $addresses['bill
 
 ?>
     <div class="billing-address-container">
-        <h4>Billing Address</h4>
+        
 		<div class="address-section">
 			<div class="billing-address-section">
+            <h4>Billing Address</h4>
 				<?php if ($default_billing) : ?>
-					<div class="billing-address-box">
+					<div class="billing-address-box" id="billing-address-box">
 						<p><?php echo esc_html($default_billing['billing_first_name'] . " " . $default_billing['billing_last_name']); ?></p>
 						<p><?php echo esc_html($default_billing['billing_address_1']); ?></p>
 						<?php if (!empty($default_billing['billing_address_2'])) : ?>
@@ -65,13 +66,14 @@ $default_billing = !empty($addresses['billing']['address_0']) ? $addresses['bill
 						<?php endif; ?>
 					</div>
 				<?php endif; ?>
+                <br/>
 				<button type="button" class="btn btn-secondary" id="openPopupBilling">Change Billing Address</button>
 			</div>
 			<div class="shipping-address-section">
 					<!-- Shipping Address Checkbox -->
-				
+                <h4>Shipping Address</h4>
 				<?php if ($default_billing) : ?>
-					<div class="billing-address-box">
+					<div id="shipping-address-box" class="billing-address-box">
 						<p><?php echo esc_html($default_billing['billing_first_name'] . " " . $default_billing['billing_last_name']); ?></p>
 						<p><?php echo esc_html($default_billing['billing_address_1']); ?></p>
 						<?php if (!empty($default_billing['billing_address_2'])) : ?>
@@ -123,11 +125,12 @@ $default_billing = !empty($addresses['billing']['address_0']) ? $addresses['bill
         foreach ($addresses['shipping'] as $key => $address) {
             $is_default = ($key === 'address_0'); // Check if it's the default address
             $address_data = json_encode($address); // Convert to JSON for JavaScript
-            $address_class = $is_default ? "default-shipping" : "select-shipping";
+            // $address_class = $is_default ? "default-shipping" : "select-shipping";
+            $address_class = "select-shipping";
             $style = $is_default ? "background-color: #f0f0f0; cursor: not-allowed;" : "cursor: pointer;";
 
             echo "<li class='{$address_class} address_custom_li' data-shipping='" . esc_attr($address_data) . "' style='{$style}'>";
-            echo "<strong>" . (!empty($address['shipping_heading']) ? esc_html($address['shipping_heading']) : ucfirst($key)) . ":</strong><br>";
+            //echo "<strong>" . (!empty($address['shipping_heading']) ? esc_html($address['shipping_heading']) : ucfirst($key)) . ":</strong><br>";
             echo esc_html($address['shipping_first_name'] . " " . $address['shipping_last_name']) . "<br>";
             echo esc_html($address['shipping_address_1']) . "<br>";
             if (!empty($address['shipping_address_2'])) {
@@ -472,8 +475,25 @@ document.querySelectorAll(".select-shipping").forEach(function(element) {
             document.getElementById("shipping_state").value = shipping.shipping_state;
             document.getElementById("shipping_postcode").value = shipping.shipping_postcode;
             document.getElementById("shipping_country").value = shipping.shipping_country;
-            alert(document.getElementById("shipping_state").value);
+            //alert(document.getElementById("shipping_state").value);
             // Highlight the selected shipping address
+
+            let shippingBox = document.getElementById("shipping-address-box");
+    
+            if (!shippingBox) return; // Exit if element is not found
+
+            let addressHTML = `
+                <p>${shipping.shipping_first_name} ${shipping.shipping_last_name}</p>
+                <p>${shipping.shipping_address_1}</p>
+                ${shipping.shipping_address_2 ? `<p>${shipping.shipping_address_2}</p>` : ""}
+                <p>${shipping.shipping_city}, ${shipping.shipping_state} - ${shipping.shipping_postcode}</p>
+                <p>${shipping.shipping_country}</p>
+                ${shipping.shipping_phone ? `<p>Phone: ${shipping.shipping_phone}</p>` : ""}
+                ${shipping.shipping_email ? `<p>Email: ${shipping.shipping_email}</p>` : ""}
+            `;
+
+            shippingBox.innerHTML = addressHTML; 
+
             document.querySelectorAll(".select-shipping").forEach(el => el.style.backgroundColor = "");
             this.style.backgroundColor = "#d0f0d0"; // Light green for selected address
         });
@@ -500,6 +520,22 @@ document.addEventListener("DOMContentLoaded", function() {
             document.getElementById("billing_country").value = billing.billing_country;
             document.getElementById("billing_phone").value = billing.billing_phone || "";
             document.getElementById("billing_email").value = billing.billing_email || "";
+
+            let billingBox = document.getElementById("billing-address-box");
+    
+            if (!billingBox) return; // Exit if element is not found
+
+            let addressHTML = `
+                <p>${billing.billing_first_name} ${billing.billing_last_name}</p>
+                <p>${billing.billing_address_1}</p>
+                ${billing.billing_address_2 ? `<p>${billing.billing_address_2}</p>` : ""}
+                <p>${billing.billing_city}, ${billing.billing_state} - ${billing.billing_postcode}</p>
+                <p>${billing.billing_country}</p>
+                ${billing.billing_phone ? `<p>Phone: ${billing.billing_phone}</p>` : ""}
+                ${billing.billing_email ? `<p>Email: ${billing.billing_email}</p>` : ""}
+            `;
+
+            billingBox.innerHTML = addressHTML; 
 
             // Highlight the selected address
             document.querySelectorAll(".select-billing").forEach(el => el.style.backgroundColor = "");
@@ -869,15 +905,21 @@ jQuery(document).ready(function ($)  {
     z-index: 1050; /* Below popup but above modal */
     display: none;
 }
-.address_custom_li{
-	border:1px solid #ccc; 
-	padding:10px; 
-	margin-left:5px; 
-	float: left;
-	height: 300px;
-	width: 200px;
-	list-style: none;
+.address_custom_li {
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin-left: 10px;
+    float: left;
+    height: 250px;
+    width: 240px;
+    list-style: none;
+    overflow: scroll;
+    margin-bottom: 10px;
 }
+.billing-address-box p {
+    margin: 0 0 5px 0;
+}
+
 button#closePopupShipping, button#closePopupBilling, button#closePopupShippingForm, button#closePopupBillingForm {
     right: 0px !important;
 	top: 0px !important;
@@ -960,6 +1002,13 @@ div#newBillingForm,div##newShippingForm {
 select#shipping_country ,select#billing_country{
     max-width: 100%;
     margin-bottom: 10px;
+}
+
+/* cart */
+td.product-thumbnail {
+    width: 70px;
+    margin: 10px;
+    margin-right: 10px;
 }
 
 </style>
