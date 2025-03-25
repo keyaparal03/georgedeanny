@@ -122,7 +122,7 @@ $default_billing = !empty($addresses['billing']['address_0']) ? $addresses['bill
     if (!empty($addresses['shipping'])) {
         echo "<ul>";
         foreach ($addresses['shipping'] as $key => $address) {
-            $is_default = ($key === 'address_0'); // Check if it's the default address
+            //$is_default = ($key === 'address_0'); // Check if it's the default address
             $address_data = json_encode($address); // Convert to JSON for JavaScript
             // $address_class = $is_default ? "default-shipping" : "select-shipping";
             $address_class = "select-shipping";
@@ -300,7 +300,7 @@ $default_billing = !empty($addresses['billing']['address_0']) ? $addresses['bill
 
 
  <?php 
-     echo '<div class="checkout-cart-editor">';
+echo '<div class="checkout-cart-editor">';
 // echo '<h3>Your order</h3>';
 echo '<div class="checkout-cart-table">';
 
