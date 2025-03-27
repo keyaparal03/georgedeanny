@@ -1,0 +1,195 @@
+<?php 
+function loobek_child_register_scripts(){
+    $parent_style = 'loobek-style';
+
+    wp_enqueue_style( $parent_style, get_template_directory_uri() . '/style.css', array('font-awesome-5', 'loobek-reset'), loobek_get_theme_version() );
+    wp_enqueue_style( 'loobek-child-style',
+        get_stylesheet_directory_uri() . '/style.css',
+        array( $parent_style )
+    );
+}
+add_action( 'wp_enqueue_scripts', 'loobek_child_register_scripts', 99 );
+
+
+function enqueue_custom_scripts() {
+    // Make sure jQuery is loaded
+    wp_enqueue_script('jquery');
+
+    // Localize script to pass AJAX URL and nonce
+    wp_localize_script('jquery', 'my_ajax_object', array(
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('billing_nonce'),
+        'get_states_nonce'=> wp_create_nonce('get_states_nonce'),
+    ));
+
+    // Add inline script to ensure `my_ajax_object` is available
+    add_action('wp_head', function() {
+        echo '<script type="text/javascript">
+            var my_ajax_object = ' . json_encode(array(
+                'ajax_url' => admin_url('admin-ajax.php'),
+                'nonce' => wp_create_nonce('billing_nonce'),
+                'get_states_nonce'=> wp_create_nonce('get_states_nonce')
+            )) . ';
+        </script>';
+    });
+}
+add_action('wp_enqueue_scripts', 'enqueue_custom_scripts');
+
+add_action('init', function () {
+    if (isset($_GET['test_ajax_action'])) {
+        die('AJAX action is registered');
+    }
+});
+
+add_action('wp_ajax_save_user_shipping_address', 'save_user_shipping_address');
+add_action('wp_ajax_nopriv_save_user_shipping_address', 'save_user_shipping_address');
+
+function save_user_shipping_address() {
+    // Security check
+    check_ajax_referer('billing_nonce', 'nonce');
+
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'You must be logged in to add an address.']);
+    }
+
+    $user_id = get_current_user_id();
+
+    // Parse the serialized data
+    parse_str($_POST['formData'], $formData);
+
+    $new_address = [
+        'shipping_first_name' => sanitize_text_field($formData['shipping_first_name']),
+        'shipping_last_name'  => sanitize_text_field($formData['shipping_last_name']),
+        'shipping_country'    => sanitize_text_field($formData['shipping_country']),
+        'shipping_address_1'  => sanitize_text_field($formData['shipping_address_1']),
+        'shipping_address_2'  => sanitize_text_field($formData['shipping_address_2']),
+        'shipping_city'       => sanitize_text_field($formData['shipping_city']),
+        'shipping_state'      => sanitize_text_field($formData['shipping_state']),
+        'shipping_postcode'   => sanitize_text_field($formData['shipping_postcode']),
+		'shipping_phone'   => sanitize_text_field($formData['shipping_phone']),
+		'shipping_email'   => sanitize_text_field($formData['shipping_email']),
+    ];
+
+    // Get existing addresses
+    $addresses = get_user_meta($user_id, 'thwma_custom_address', true);
+    if (!is_array($addresses)) {
+        $addresses = ['shipping' => [], 'default_shipping' => ''];
+    }
+
+    // Generate a new address key
+    $address_key = 'address_' . (count($addresses['shipping']) + 1);
+    $addresses['shipping'][$address_key] = $new_address;
+
+    // Save updated address list
+    update_user_meta($user_id, 'thwma_custom_address', $addresses);
+
+    wp_send_json_success(['message' => 'Shipping address added successfully!']);
+}
+
+add_action('wp_ajax_save_user_billing_address', 'save_user_billing_address');
+add_action('wp_ajax_nopriv_save_user_billing_address', 'save_user_billing_address');
+
+function save_user_billing_address() {
+    // Security check
+    check_ajax_referer('billing_nonce', 'nonce');
+
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'You must be logged in to add an address.']);
+    }
+
+    $user_id = get_current_user_id();
+
+    // Parse the serialized data
+    parse_str($_POST['formData'], $formData);
+
+    $new_address = [
+        'billing_first_name' => sanitize_text_field($formData['billing_first_name']),
+        'billing_last_name'  => sanitize_text_field($formData['billing_last_name']),
+        'billing_country'    => sanitize_text_field($formData['billing_country']),
+        'billing_address_1'  => sanitize_text_field($formData['billing_address_1']),
+        'billing_address_2'  => sanitize_text_field($formData['billing_address_2']),
+        'billing_city'       => sanitize_text_field($formData['billing_city']),
+        'billing_state'      => sanitize_text_field($formData['billing_state']),
+        'billing_postcode'   => sanitize_text_field($formData['billing_postcode']),
+		'billing_phone'   => sanitize_text_field($formData['billing_phone']),
+		'billing_email'   => sanitize_text_field($formData['billing_email']),
+    ];
+
+    // Get existing addresses
+    $addresses = get_user_meta($user_id, 'thwma_custom_address', true);
+    if (!is_array($addresses)) {
+        $addresses = ['billing' => [], 'default_billing' => ''];
+    }
+
+    // Generate a new address key
+    $address_key = 'address_' . (count($addresses['billing']) + 1);
+    $addresses['billing'][$address_key] = $new_address;
+
+    // Save updated address list
+    update_user_meta($user_id, 'thwma_custom_address', $addresses);
+
+    wp_send_json_success(['message' => 'Billing address added successfully!']);
+}
+
+function get_states_by_country() {
+    if (!isset($_POST['security']) || !wp_verify_nonce($_POST['security'], 'get_states_nonce')) {
+        wp_send_json_error(['message' => 'Nonce verification failed'], 403);
+        exit;
+    }
+
+    if (!isset($_POST['country_code'])) {
+        wp_send_json_error(['message' => 'Invalid request'], 400);
+        exit;
+    }
+
+    $country_code = sanitize_text_field($_POST['country_code']);
+    $states = WC()->countries->get_states($country_code);
+
+    if (!empty($states)) {
+        //print_r($states);
+        // Transform array to include both key and value
+        $formatted_states = [];
+        foreach ($states as $code => $name) {
+            $formatted_states[] = [
+                'code' => $code,
+                'name' => $name
+            ];
+        }
+        wp_send_json_success($formatted_states);
+    } else {
+        wp_send_json_error(['message' => 'No states found']);
+    }
+}
+add_action('wp_ajax_get_states', 'get_states_by_country');
+add_action('wp_ajax_nopriv_get_states', 'get_states_by_country'); // Allow guest users
+
+// Update Cart Quantity
+function update_cart_quantity_callback() {
+    $cart_item_key = sanitize_text_field($_POST['cart_item_key']);
+    $quantity = intval($_POST['quantity']);
+
+    if (isset(WC()->cart->cart_contents[$cart_item_key])) {
+        WC()->cart->set_quantity($cart_item_key, $quantity);
+        WC()->cart->calculate_totals();
+        wp_send_json_success();
+    } else {
+        wp_send_json_error();
+    }
+}
+add_action('wp_ajax_update_cart_quantity', 'update_cart_quantity_callback');
+add_action('wp_ajax_nopriv_update_cart_quantity', 'update_cart_quantity_callback');
+
+// Remove Item from Cart
+function remove_cart_item_callback() {
+    $cart_item_key = sanitize_text_field($_POST['cart_item_key']);
+
+    if (WC()->cart->remove_cart_item($cart_item_key)) {
+        WC()->cart->calculate_totals();
+        wp_send_json_success();
+    } else {
+        wp_send_json_error();
+    }
+}
+add_action('wp_ajax_remove_cart_item', 'remove_cart_item_callback');
+add_action('wp_ajax_nopriv_remove_cart_item', 'remove_cart_item_callback');
+
