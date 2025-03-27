@@ -162,3 +162,34 @@ function get_states_by_country() {
 }
 add_action('wp_ajax_get_states', 'get_states_by_country');
 add_action('wp_ajax_nopriv_get_states', 'get_states_by_country'); // Allow guest users
+
+// Update Cart Quantity
+function update_cart_quantity_callback() {
+    $cart_item_key = sanitize_text_field($_POST['cart_item_key']);
+    $quantity = intval($_POST['quantity']);
+
+    if (isset(WC()->cart->cart_contents[$cart_item_key])) {
+        WC()->cart->set_quantity($cart_item_key, $quantity);
+        WC()->cart->calculate_totals();
+        wp_send_json_success();
+    } else {
+        wp_send_json_error();
+    }
+}
+add_action('wp_ajax_update_cart_quantity', 'update_cart_quantity_callback');
+add_action('wp_ajax_nopriv_update_cart_quantity', 'update_cart_quantity_callback');
+
+// Remove Item from Cart
+function remove_cart_item_callback() {
+    $cart_item_key = sanitize_text_field($_POST['cart_item_key']);
+
+    if (WC()->cart->remove_cart_item($cart_item_key)) {
+        WC()->cart->calculate_totals();
+        wp_send_json_success();
+    } else {
+        wp_send_json_error();
+    }
+}
+add_action('wp_ajax_remove_cart_item', 'remove_cart_item_callback');
+add_action('wp_ajax_nopriv_remove_cart_item', 'remove_cart_item_callback');
+

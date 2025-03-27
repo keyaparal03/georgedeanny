@@ -299,13 +299,60 @@ $default_billing = !empty($addresses['billing']['address_0']) ? $addresses['bill
 
 
 
- <?php 
-// echo '<div class="checkout-cart-editor">';
-// // echo '<h3>Your order</h3>';
-// echo '<div class="checkout-cart-table">';
-// echo '</div>';
-// echo '</div>';
-?>
+<table class="shop_table checkout-cart-items">
+    <thead>
+        <tr>
+            <th class="product-thumbnail">&nbsp;</th>
+            <th class="product-name"><?php _e('Product', 'woocommerce'); ?></th>
+            <th class="product-price"><?php _e('Price', 'woocommerce'); ?></th>
+            <th class="product-quantity"><?php _e('Quantity', 'woocommerce'); ?></th>
+            <th class="product-subtotal"><?php _e('Subtotal', 'woocommerce'); ?></th>
+            <th class="product-remove">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
+            $_product = $cart_item['data'];
+            if ($_product && $_product->exists() && $cart_item['quantity'] > 0) {
+        ?>
+                <tr data-cart-item-key="<?php echo esc_attr($cart_item_key); ?>">
+                    <td class="product-thumbnail">
+                        <?php echo $_product->get_image(); ?>
+                    </td>
+                    <td class="product-name">
+                        <?php echo $_product->get_name(); ?>
+                    </td>
+                    <td class="product-price">
+                        <?php echo WC()->cart->get_product_price($_product); ?>
+                    </td>
+                    <td class="product-quantity">
+                        <div class="quantity">
+                            <button type="button" class="qty-decrease" data-cart-item-key="<?php echo esc_attr($cart_item_key); ?>">-</button>
+                            <input type="number" 
+                                   class="input-text qty checkout-qty-input" 
+                                   data-cart-item-key="<?php echo esc_attr($cart_item_key); ?>"
+                                   step="1" 
+                                   min="1" 
+                                   max="<?php echo $_product->get_max_purchase_quantity(); ?>" 
+                                   value="<?php echo esc_attr($cart_item['quantity']); ?>" 
+                                   size="4"
+                                   pattern="[0-9]*" 
+                                   inputmode="numeric" />
+                            <button type="button" class="qty-increase" data-cart-item-key="<?php echo esc_attr($cart_item_key); ?>">+</button>
+                        </div>
+                    </td>
+                    <td class="product-subtotal">
+                        <?php echo WC()->cart->get_product_subtotal($_product, $cart_item['quantity']); ?>
+                    </td>
+                    <td class="product-remove">
+                        <a href="#" class="remove checkout-remove-item" data-cart-item-key="<?php echo esc_attr($cart_item_key); ?>">&times;</a>
+                    </td>
+                </tr>
+        <?php }
+        } ?>
+    </tbody>
+</table>
+
 
 
 
@@ -381,6 +428,66 @@ jQuery(document).ready(function($) {
 	})
 });
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    function updateCartItem(cartItemKey, quantity) {
+        let formData = new FormData();
+        formData.append("action", "update_cart_quantity");
+        formData.append("cart_item_key", cartItemKey);
+        formData.append("quantity", quantity);
+
+        fetch("<?php echo admin_url('admin-ajax.php'); ?>", {
+            method: "POST",
+            body: formData
+        }).then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload(); // Refresh cart totals
+            }
+        });
+    }
+
+    document.querySelectorAll(".qty-increase").forEach(button => {
+        button.addEventListener("click", function () {
+            let input = this.parentNode.querySelector(".checkout-qty-input");
+            let newQty = parseInt(input.value) + 1;
+            input.value = newQty;
+            updateCartItem(input.getAttribute("data-cart-item-key"), newQty);
+        });
+    });
+
+    document.querySelectorAll(".qty-decrease").forEach(button => {
+        button.addEventListener("click", function () {
+            let input = this.parentNode.querySelector(".checkout-qty-input");
+            let newQty = Math.max(1, parseInt(input.value) - 1);
+            input.value = newQty;
+            updateCartItem(input.getAttribute("data-cart-item-key"), newQty);
+        });
+    });
+
+    document.querySelectorAll(".checkout-remove-item").forEach(button => {
+        button.addEventListener("click", function (e) {
+            e.preventDefault();
+            let cartItemKey = this.getAttribute("data-cart-item-key");
+
+            let formData = new FormData();
+            formData.append("action", "remove_cart_item");
+            formData.append("cart_item_key", cartItemKey);
+
+            fetch("<?php echo admin_url('admin-ajax.php'); ?>", {
+                method: "POST",
+                body: formData
+            }).then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                }
+            });
+        });
+    });
+});
+</script>
+
 <script>
 // Shipping Address Selection
 document.querySelectorAll(".select-shipping").forEach(function(element) {
@@ -795,6 +902,7 @@ jQuery(document).ready(function ($)  {
     handleFormSubmission("#billingAddressForm", "save_user_billing_address", "#popupNewBillingForm");
 
 });
+
 
 </script>
 <style>
