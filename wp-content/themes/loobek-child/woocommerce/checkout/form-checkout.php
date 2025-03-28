@@ -969,11 +969,9 @@ button#closePopupShipping, button#closePopupBilling, button#closePopupShippingFo
 }
 
 .billing-address-box {
-    background: #ccc;
     padding: 10px;
     border-radius: 6px;
-	
-    /* border-left: 4px solid #4CAF50; */
+    border: 1px solid #000;
     font-size: 14px;
     color: #000;
 }
@@ -1041,4 +1039,16 @@ td.product-thumbnail {
     margin-right: 10px;
 }
 
+tr.woocommerce-shipping-totals.shipping #shipping_method {
+    float: left ! IMPORTANT;
+    text-align: left;
+    width: 100%;
+    overflow: scroll;
+    padding-left: 33px;
+    max-height: 300px;
+}
+ .woocommerce-checkout #order_review{
+    width: 100%;
+    float: none;
+ }
 </style>
