@@ -296,8 +296,16 @@ $default_billing = !empty($addresses['billing']['address_0']) ? $addresses['bill
 	
     </div>
 </div>
-
-
+<!-- Popup shipping method -->
+<div id="shipping-popup" class="popup-container">
+    <div class="popup-content">
+        <h3>Select Shipping Method</h3>
+        <ul id="popup-shipping-methods">
+            <!-- Shipping options will be copied here dynamically -->
+        </ul>
+        <button id="close-shipping-popup">Close</button>
+    </div>
+</div>
 
 <table class="shop_table checkout-cart-items">
     <thead>
@@ -901,13 +909,66 @@ jQuery(document).ready(function ($)  {
     handleFormSubmission("#shippingAddressForm", "save_user_shipping_address", "#popupNewShippingForm");
     handleFormSubmission("#billingAddressForm", "save_user_billing_address", "#popupNewBillingForm");
 
+
+    /**
+     * Shipping method
+     */
+    jQuery(document.body).on('updated_checkout', function() {
+        // Call your custom function here
+        myCustomFunction();
+    });
+
+    function myCustomFunction() {
+        //console.log("Checkout updated!");
+        $("#shipping_method").before('<a id="open-shipping-popup">Change Shipping Method</a>');
+        $("#shipping_method").after('<div id="selected-shipping-method" style="margin-top:10px; font-weight:bold;"></div>');
+
+        // Get the checked radio button for shipping methods
+        var selectedRadio = jQuery('input[name="shipping_method[0]"]:checked');
+        let selectedLabel ='';
+        // Find the closest <li> (or any container that holds the label) and then get the text of the label element
+        selectedLabel = selectedRadio.closest("li").find("label").first().text().trim();
+
+        //console.log("Selected shipping method label:", selectedLabel);
+        // var selectedLabel = $("#shipping_method").closest("li").find("label").text().trim();
+        // console.log(selectedLabel);
+        $("#selected-shipping-method").html("<span>Selected Shipping Method : </span>"+selectedLabel);
+
+        $("#open-shipping-popup").click(function() {
+        $("#popup-shipping-methods").html($("#shipping_method").html());
+        $("#shipping-popup").fadeIn();
+    });
+    // Use delegated binding on the popup container for changes to the radio button selection
+    $("#popup-shipping-methods").on("change", "input[type='radio']", function() {
+        //console.log("Keya");
+        var selectedValue = $(this).val();
+        //console.log(selectedValue);
+        // Uncheck all and check the one with matching value in the main shipping methods list
+        $("#shipping_method input[type='radio']").prop("checked", false);
+        $("#shipping_method input[type='radio'][value='" + selectedValue + "']")
+            .prop("checked", true)
+            .trigger("change");
+
+        var selectedLabel = $(this).closest("li").find("label").text().trim();
+        //console.log(selectedLabel);
+        $("#selected-shipping-method").html("<span>Selected Shipping Method : </span>"+selectedLabel);
+
+        // Close the popup
+        $("#shipping-popup").fadeOut();
+    });
+
+            // Add additional logic here
+    }
+
 });
 
 
 </script>
 <style>
 /* Styles for the popup inside the modal */
-#popupContentShipping, #popupContentBilling, #popupNewBillingForm, #popupNewShippingForm {
+
+
+#popupContentShipping, #popupContentBilling, #popupNewBillingForm, #popupNewShippingForm,#shipping-popup {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -1031,24 +1092,95 @@ select#shipping_country ,select#billing_country{
     max-width: 100%;
     margin-bottom: 10px;
 }
+/* 
+** shipping popup
+ */
+ /* Popup Styles */
+/* 
+.popup-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+} */
 
+.popup-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
 /* cart */
 td.product-thumbnail {
     width: 70px;
     margin: 10px;
     margin-right: 10px;
 }
-
-tr.woocommerce-shipping-totals.shipping #shipping_method {
-    float: left ! IMPORTANT;
-    text-align: left;
-    width: 100%;
-    overflow: scroll;
-    padding-left: 33px;
-    max-height: 300px;
+#shipping_method{
+    display: none;
 }
- .woocommerce-checkout #order_review{
-    width: 100%;
-    float: none;
- }
+
+
+
+
+ul#popup-shipping-methods li {
+    margin: 0;
+    padding: 0 0 8px 0;
+    line-height: 18px;
+    text-indent: 0;
+    list-style: none;
+    position: relative;
+    text-align: start;
+}
+ul#popup-shipping-methods li input {
+    position: absolute;
+    top: 3px;
+    margin: 0;
+    left: -20px;
+}
+ul#popup-shipping-methods li input {
+    margin: 3px .4375em 0 0;
+    vertical-align: top;
+}
+ul#popup-shipping-methods {
+    margin: 20px 100px;
+}
+#open-shipping-popup{
+    width: 190px;
+    font-size: 13px;
+    padding: 0 8px;
+}
+.shop_table.checkout-cart-items{
+    width: 70%!important;
+    float: left;
+}
+.woocommerce > form.checkout{
+    width: 30%!important;
+}
+td.product-name {
+    width: 50%;
+    padding: 10px;
+}
+
+input.input-text.qty.checkout-qty-input {
+    padding: 0px;
+    width: 50px;
+    line-height: 8px;
+    height: 40px;
+}
+button.qty-decrease, button.qty-increase {
+    width: 30px;
+    height: 40px;
+    background: #f3f4f5;
+    border:none;
+    color:#000;
+    padding-top:3px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
 </style>
