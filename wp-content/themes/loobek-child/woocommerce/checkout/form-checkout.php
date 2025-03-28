@@ -438,22 +438,42 @@ jQuery(document).ready(function($) {
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+    // function updateCartItem(cartItemKey, quantity) {
+    //     let formData = new FormData();
+    //     formData.append("action", "update_cart_quantity");
+    //     formData.append("cart_item_key", cartItemKey);
+    //     formData.append("quantity", quantity);
+
+    //     fetch("<?php //echo admin_url('admin-ajax.php'); ?>", {
+    //         method: "POST",
+    //         body: formData
+    //     }).then(response => response.json())
+    //     .then(data => {
+    //         if (data.success) {
+    //             location.reload(); // Refresh cart totals
+    //         }
+    //     });
+    // }
+
     function updateCartItem(cartItemKey, quantity) {
         let formData = new FormData();
         formData.append("action", "update_cart_quantity");
+        formData.append("security", my_ajax_object.wc_cart_params);
         formData.append("cart_item_key", cartItemKey);
         formData.append("quantity", quantity);
 
-        fetch("<?php echo admin_url('admin-ajax.php'); ?>", {
+        fetch(my_ajax_object.ajax_url, { // Use WooCommerce's AJAX URL
             method: "POST",
             body: formData
         }).then(response => response.json())
         .then(data => {
             if (data.success) {
-                location.reload(); // Refresh cart totals
+                // Trigger WooCommerce cart update to refresh totals
+                jQuery(document.body).trigger("wc_fragment_refresh");
             }
         });
     }
+
 
     document.querySelectorAll(".qty-increase").forEach(button => {
         button.addEventListener("click", function () {

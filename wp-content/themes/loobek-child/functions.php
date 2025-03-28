@@ -20,15 +20,18 @@ function enqueue_custom_scripts() {
         'ajax_url' => admin_url('admin-ajax.php'),
         'nonce' => wp_create_nonce('billing_nonce'),
         'get_states_nonce'=> wp_create_nonce('get_states_nonce'),
+        'wc_cart_params'=> wp_create_nonce('wc_cart_params'),
     ));
 
+    add_action('wp_enqueue_scripts', 'enqueue_wc_scripts');
     // Add inline script to ensure `my_ajax_object` is available
     add_action('wp_head', function() {
         echo '<script type="text/javascript">
             var my_ajax_object = ' . json_encode(array(
                 'ajax_url' => admin_url('admin-ajax.php'),
                 'nonce' => wp_create_nonce('billing_nonce'),
-                'get_states_nonce'=> wp_create_nonce('get_states_nonce')
+                'get_states_nonce'=> wp_create_nonce('get_states_nonce'),
+                'wc_cart_params'=>wp_create_nonce('wc_cart_params')
             )) . ';
         </script>';
     });
@@ -193,3 +196,8 @@ function remove_cart_item_callback() {
 add_action('wp_ajax_remove_cart_item', 'remove_cart_item_callback');
 add_action('wp_ajax_nopriv_remove_cart_item', 'remove_cart_item_callback');
 
+add_action('wp_enqueue_scripts', function () {
+    wp_localize_script('wc-cart-fragments', 'wc_cart_fragments_params', array(
+        'ajax_url' => admin_url('admin-ajax.php')
+    ));
+});
