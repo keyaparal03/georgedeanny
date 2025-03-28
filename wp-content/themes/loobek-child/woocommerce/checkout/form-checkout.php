@@ -358,9 +358,11 @@ $default_billing = !empty($addresses['billing']['address_0']) ? $addresses['bill
                 </tr>
         <?php }
         } ?>
+        <tr><td colspan="6" class="update-cart-btn-td"><button id="update-cart-btn">Update Cart</button></td></tr>
     </tbody>
 </table>
 
+<!-- Add Update Cart Button -->
 
 
 
@@ -514,6 +516,34 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+jQuery(document).ready(function ($) {
+    $("#update-cart-btn").click(function () {
+        let updatedCart = {};
+
+        $(".checkout-qty-input").each(function () {
+            let cartItemKey = $(this).data("cart-item-key");
+            let quantity = $(this).val();
+            updatedCart[cartItemKey] = quantity;
+        });
+
+        $.ajax({
+            type: "POST",
+            url: my_ajax_object.ajax_url,
+            data: {
+                action: "update_cart_bulk",
+                cart_items: updatedCart
+            },
+            success: function (response) {
+                if (response.success) {
+                    location.reload();
+                    $("#update-message").show().delay(2000).fadeOut(); // Show success message
+                    jQuery(document.body).trigger("update_checkout"); // Refresh checkout totals
+                }
+            }
+        });
+    });
+});
+
 </script>
 
 <script>
@@ -1202,5 +1232,11 @@ button.qty-decrease, button.qty-increase {
     padding-top:3px;
     padding-left: 10px;
     padding-right: 10px;
+}
+.woocommerce table.shop_table tr td {
+    padding-right: 15px;
+}
+td.update-cart-btn-td {
+    text-align: right;
 }
 </style>

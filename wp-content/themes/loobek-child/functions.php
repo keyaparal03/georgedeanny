@@ -193,3 +193,20 @@ function remove_cart_item_callback() {
 add_action('wp_ajax_remove_cart_item', 'remove_cart_item_callback');
 add_action('wp_ajax_nopriv_remove_cart_item', 'remove_cart_item_callback');
 
+
+add_action('wp_ajax_update_cart_bulk', 'update_cart_bulk_callback');
+add_action('wp_ajax_nopriv_update_cart_bulk', 'update_cart_bulk_callback');
+
+function update_cart_bulk_callback() {
+    if (!isset($_POST['cart_items']) || !is_array($_POST['cart_items'])) {
+        wp_send_json_error(["message" => "Invalid cart data"]);
+    }
+
+    $cart = WC()->cart;
+    foreach ($_POST['cart_items'] as $cart_item_key => $quantity) {
+        $cart->set_quantity($cart_item_key, intval($quantity));
+    }
+    
+    $cart->calculate_totals();
+    wp_send_json_success(["message" => "Cart updated successfully"]);
+}
