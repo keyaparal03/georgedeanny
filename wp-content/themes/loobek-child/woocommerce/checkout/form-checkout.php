@@ -46,9 +46,12 @@ $default_billing = !empty($addresses['billing']['address_0']) ? $addresses['bill
 ?>
     <div class="billing-address-container">
         
-		<div class="address-section">
+		<div class="address-section"> 
 			<div class="billing-address-section">
-            <h4>Billing Address</h4>
+            <div class="d-flx" style="margin-top:30px;">
+                <h4>Billing Address</h4>
+                <button type="button" class="btn btn-secondary" id="openPopupBilling">Change Billing Address</button>
+            </div>
 				<?php if ($default_billing) : ?>
 					<div class="billing-address-box" id="billing-address-box">
 						<p><?php echo esc_html($default_billing['billing_first_name'] . " " . $default_billing['billing_last_name']); ?></p>
@@ -66,11 +69,22 @@ $default_billing = !empty($addresses['billing']['address_0']) ? $addresses['bill
 						<?php endif; ?>
 					</div>
 				<?php endif; ?>
-                <br/>
-				<button type="button" class="btn btn-secondary" id="openPopupBilling">Change Billing Address</button>
 			</div>
 			<div class="shipping-address-section">
+                    <div class="shipping-checkbox">
+                        <input type="checkbox" id="shipToDifferentAddress">
+                        <label for="shipToDifferentAddress">Shipping address diffrent than billing address</label>
+                    </div>
+                <div class="d-flx">
                 <h4>Shipping Address</h4>
+                <div class="d-flxr">
+                   
+                    <!-- Shipping Address Box (Initially Hidden) -->
+                    <div class="address-box" id="shippingAddressBox" style="display: none;">
+                        <button type="button" class="btn btn-secondary" id="openPopupShipping" style="display: none;">Change Shipping Address</button>
+                    </div>
+                </div>
+                </div>
 				<?php if ($default_billing) : ?>
 					<div class="billing-address-box" id="shipping-address-box">
 						<p><?php echo esc_html($default_billing['billing_first_name'] . " " . $default_billing['billing_last_name']); ?></p>
@@ -88,14 +102,7 @@ $default_billing = !empty($addresses['billing']['address_0']) ? $addresses['bill
 						<?php endif; ?>
 					</div>
 				<?php endif; ?>
-				<div class="shipping-checkbox">
-					<input type="checkbox" id="shipToDifferentAddress">
-					<label for="shipToDifferentAddress">Shipping address diffrent than billing address</label>
-				</div>
-				<!-- Shipping Address Box (Initially Hidden) -->
-				<div class="address-box" id="shippingAddressBox" style="display: none;">
-					<button type="button" class="btn btn-secondary" id="openPopupShipping" style="display: none;">Change Shipping Address</button>
-				</div>
+				
 			</div>
 		</div>
     </div>
@@ -109,202 +116,227 @@ $default_billing = !empty($addresses['billing']['address_0']) ? $addresses['bill
 <!-- Hidden Popup inside Modal -->
 <div id="popupContentShipping" class="d-none position-relative">
     <!-- Close Button -->
-	
-    <button type="button" class="close-btn" id="closePopupShipping">&times;</button>
+	<div class="popBack">
+        <button type="button" class="close-btn" id="closePopupShipping">&times;</button>
+        <div class="addressHead">
+            <div>
+                <h5>Shipping Addresses</h5>
+            </div>
+            <div><button id="addNewShippingAddress" class="btn btn-primary">+ Add New Shipping Address</button></div>
+        </div>
+        <div class="shipping-address-list">
+        <?php
+        $user_id = get_current_user_id();
+        $addresses = get_user_meta($user_id, 'thwma_custom_address', true);
 
-    <h5>Shipping Addresses</h5>
-	<div class="shipping-address-list">
-    <?php
-    $user_id = get_current_user_id();
-    $addresses = get_user_meta($user_id, 'thwma_custom_address', true);
+        // Display Shipping Addresses
+        if (!empty($addresses['shipping'])) {
+            echo "<ul>";
+            foreach ($addresses['shipping'] as $key => $address) {
+                //$is_default = ($key === 'address_0'); // Check if it's the default address
+                $address_data = json_encode($address); // Convert to JSON for JavaScript
+                // $address_class = $is_default ? "default-shipping" : "select-shipping";
+                $address_class = "select-shipping";
+                $style = $is_default ? "background-color: #f0f0f0; cursor: not-allowed;" : "cursor: pointer;";
 
-    // Display Shipping Addresses
-    if (!empty($addresses['shipping'])) {
-        echo "<ul>";
-        foreach ($addresses['shipping'] as $key => $address) {
-            //$is_default = ($key === 'address_0'); // Check if it's the default address
-            $address_data = json_encode($address); // Convert to JSON for JavaScript
-            // $address_class = $is_default ? "default-shipping" : "select-shipping";
-            $address_class = "select-shipping";
-            $style = $is_default ? "background-color: #f0f0f0; cursor: not-allowed;" : "cursor: pointer;";
-
-            echo "<li class='{$address_class} address_custom_li' data-shipping='" . esc_attr($address_data) . "' style='{$style}'>";
-            //echo "<strong>" . (!empty($address['shipping_heading']) ? esc_html($address['shipping_heading']) : ucfirst($key)) . ":</strong><br>";
-            echo esc_html($address['shipping_first_name'] . " " . $address['shipping_last_name']) . "<br>";
-            echo esc_html($address['shipping_address_1']) . "<br>";
-            if (!empty($address['shipping_address_2'])) {
-                echo esc_html($address['shipping_address_2']) . "<br>";
+                echo "<li class='{$address_class} address_custom_li' data-shipping='" . esc_attr($address_data) . "' style='{$style}'>";
+                //echo "<strong>" . (!empty($address['shipping_heading']) ? esc_html($address['shipping_heading']) : ucfirst($key)) . ":</strong><br>";
+                echo esc_html($address['shipping_first_name'] . " " . $address['shipping_last_name']) . "<br>";
+                echo esc_html($address['shipping_address_1']) . "<br>";
+                if (!empty($address['shipping_address_2'])) {
+                    echo esc_html($address['shipping_address_2']) . "<br>";
+                }
+                echo esc_html($address['shipping_city'] . ", " . $address['shipping_state'] . " - " . $address['shipping_postcode']) . "<br>";
+                echo esc_html($address['shipping_country']) . "<br>";
+                echo "</li>";
             }
-            echo esc_html($address['shipping_city'] . ", " . $address['shipping_state'] . " - " . $address['shipping_postcode']) . "<br>";
-            echo esc_html($address['shipping_country']) . "<br>";
-            echo "</li>";
+            echo "</ul>";
         }
-        echo "</ul>";
-    }
-    ?>
-	</div>
-    <br/>
-	<button id="addNewShippingAddress" class="btn btn-primary">+ Add New Shipping Address</button>
-
+        ?>
+        </div>
+        <br/>
+       
+    </div>
+    <div class="popBackDrop"></div>
 </div>
 
 <!-- Hidden Popup inside Modal -->
 <div id="popupNewShippingForm" class="d-none position-relative">
     <!-- Close Button -->
-    <button type="button" class="close-btn" id="closePopupShippingForm">&times;</button>
+    <div class="popBack">
+        <button type="button" class="close-btn" id="closePopupShippingForm">&times;</button>
 
-    <h5>Add Shipping Addresses</h5>
-	 
-    <!-- Add New Address Form (Initially Hidden) -->
-    <div id="newShippingForm">
-       <form id="shippingAddressForm">
-        <label for="shipping_first_name">First Name</label>
-        <input type="text" name="shipping_first_name" required>
+        <h5>Add Shipping Addresses</h5>
+        
+        <!-- Add New Address Form (Initially Hidden) -->
+        <div id="newShippingForm">
+        <form id="shippingAddressForm">
+            <label for="shipping_first_name">First Name</label>
+            <input type="text" name="shipping_first_name" required>
 
-        <label for="shipping_last_name">Last Name</label>
-        <input type="text" name="shipping_last_name" required>
+            <label for="shipping_last_name">Last Name</label>
+            <input type="text" name="shipping_last_name" required>
 
-        <label for="shipping_country">Country</label>
-        <select id="shipping_country2" name="shipping_country">
-            <?php foreach ($shipping_countries as $code => $name) : ?>
-                <option value="<?php echo esc_attr($code); ?>"><?php echo esc_html($name); ?></option>
-            <?php endforeach; ?>
-        </select>
+            <label for="shipping_country">Country</label>
+            <select id="shipping_country2" name="shipping_country">
+                <?php foreach ($shipping_countries as $code => $name) : ?>
+                    <option value="<?php echo esc_attr($code); ?>"><?php echo esc_html($name); ?></option>
+                <?php endforeach; ?>
+            </select>
 
-        <label for="shipping_address_1">Address Line 1</label>
-        <input type="text" name="shipping_address_1" required>
+            <label for="shipping_address_1">Address Line 1</label>
+            <input type="text" name="shipping_address_1" required>
 
-        <label for="shipping_address_2">Address Line 2</label>
-        <input type="text" name="shipping_address_2">
+            <label for="shipping_address_2">Address Line 2</label>
+            <input type="text" name="shipping_address_2">
 
-        <label for="shipping_city">City</label>
-        <input type="text" name="shipping_city" required>
+            <label for="shipping_city">City</label>
+            <input type="text" name="shipping_city" required>
 
-        <label for="shipping_state1">State</label>
-        <select id="shipping_state1" name="shipping_state">
-        <!-- States will be dynamically populated via JavaScript -->
-        </select>
+            <label for="shipping_state1">State</label>
+            <select id="shipping_state1" name="shipping_state">
+            <!-- States will be dynamically populated via JavaScript -->
+            </select>
 
-        <label for="shipping_postcode">Postcode</label>
-        <input type="text" name="shipping_postcode" required>
-		<!-- New Phone Field -->
-		<label for="shipping_phone">Phone</label>
-		<input type="text" name="shipping_phone" required>
+            <label for="shipping_postcode">Postcode</label>
+            <input type="text" name="shipping_postcode" required>
+            <!-- New Phone Field -->
+            <label for="shipping_phone">Phone</label>
+            <input type="text" name="shipping_phone" required>
 
-		<!-- New Email Field -->
-		<label for="shipping_email">Email</label>
-		<input type="email" name="shipping_email" required>
+            <!-- New Email Field -->
+            <label for="shipping_email">Email</label>
+            <input type="email" name="shipping_email" required>
 
-        <button type="submit" class="btn btn-success">Save Address</button>
-		</form> 
-	
-	
+            <button type="submit" class="btn btn-success">Save Address</button>
+            </form> 
+        
+        
+        </div>
     </div>
+    <div class="popBackDrop"></div>
 </div>
 <!-- Hidden Popup inside Modal -->
 <div id="popupContentBilling" class="d-none">
-	<button type="button" class="close-btn" id="closePopupBilling">&times;</button>
-    <h5>Billing Addresses</h5>
-	<div class="billing-address-list">
-	<?php
-		$user_id = get_current_user_id();
-		$addresses = get_user_meta($user_id, 'thwma_custom_address', true);
+    <div class="popBack">
+        <button type="button" class="close-btn" id="closePopupBilling">&times;</button>
+        <div class="addressHead">
+            <div>
+                <h5>Billing Addresses</h5>
+            </div>
+            <div>
+                <button id="addNewBillingAddress" class="btn btn-primary">+ Add New Billing Address</button>
+            </div>
+        </div>
+       
+        <div class="billing-address-list">
+        <?php
+            $user_id = get_current_user_id();
+            $addresses = get_user_meta($user_id, 'thwma_custom_address', true);
 
-		if (!empty($addresses) && is_array($addresses)) {
-			// Display Billing Addresses
-			if (!empty($addresses['billing'])) {
-				echo "<ul>";
+            if (!empty($addresses) && is_array($addresses)) {
+                // Display Billing Addresses
+                if (!empty($addresses['billing'])) {
+                    echo "<ul>";
 
-				foreach ($addresses['billing'] as $key => $address) {
-					//$is_default = ($key === 'address_0'); // Check if it's the default address
-					$address_data = json_encode($address); // Convert to JSON for JavaScript use
-					$address_class = "select-billing";
-					$style = $is_default ? "background-color: #f0f0f0; cursor: not-allowed;" : "cursor: pointer;";
+                    foreach ($addresses['billing'] as $key => $address) {
+                        //$is_default = ($key === 'address_0'); // Check if it's the default address
+                        $address_data = json_encode($address); // Convert to JSON for JavaScript use
+                        $address_class = "select-billing";
+                        $style = $is_default ? "background-color: #f0f0f0; cursor: not-allowed;" : "cursor: pointer;";
 
-					echo "<li class='{$address_class} address_custom_li' data-billing='" . esc_attr($address_data) . "' style='{$style}'>";
-					echo "<strong>" . (!empty($address['billing_heading']) ? esc_html($address['billing_heading']) : '') . "</strong><br>";
-					echo esc_html($address['billing_first_name'] . " " . $address['billing_last_name']) . "<br>";
-					echo esc_html($address['billing_address_1']) . "<br>";
-					if (!empty($address['billing_address_2'])) {
-						echo esc_html($address['billing_address_2']) . "<br>";
-					}
-					echo esc_html($address['billing_city'] . ", " . $address['billing_state'] . " - " . $address['billing_postcode']) . "<br>";
-					echo esc_html($address['billing_country']) . "<br>";
-					if (!empty($address['billing_phone'])) {
-						echo "Phone: " . esc_html($address['billing_phone']) . "<br>";
-					}
-					if (!empty($address['billing_email'])) {
-						echo "Email: " . esc_html($address['billing_email']) . "<br>";
-					}
-					echo "</li>";
-				}
+                        echo "<li class='{$address_class} address_custom_li' data-billing='" . esc_attr($address_data) . "' style='{$style}'>";
+                        echo "<strong>" . (!empty($address['billing_heading']) ? esc_html($address['billing_heading']) : '') . "</strong><br>";
+                        echo esc_html($address['billing_first_name'] . " " . $address['billing_last_name']) . "<br>";
+                        echo esc_html($address['billing_address_1']) . "<br>";
+                        if (!empty($address['billing_address_2'])) {
+                            echo esc_html($address['billing_address_2']) . "<br>";
+                        }
+                        echo esc_html($address['billing_city'] . ", " . $address['billing_state'] . " - " . $address['billing_postcode']) . "<br>";
+                        echo esc_html($address['billing_country']) . "<br>";
+                        if (!empty($address['billing_phone'])) {
+                            echo "Phone: " . esc_html($address['billing_phone']) . "<br>";
+                        }
+                        if (!empty($address['billing_email'])) {
+                            echo "Email: " . esc_html($address['billing_email']) . "<br>";
+                        }
+                        echo "</li>";
+                    }
 
-				echo "</ul>";
-			}
-		}
-	?>
+                    echo "</ul>";
+                }
+            }
+        ?>
+        </div>
+        
     </div>
-    <button id="addNewBillingAddress" class="btn btn-primary">+ Add New Billing Address</button>
+    <div class="popBackDrop"></div>
 </div>
 
 <div id="popupNewBillingForm" class="d-none">
-	<button type="button" class="close-btn" id="closePopupBillingForm">&times;</button>
-    <h5>New Billing Addresses</h5>
-    <!-- Add New Address Form (Initially Hidden) -->
-    <div id="newBillingForm">
-       <form id="billingAddressForm">
-        <label for="billing_first_name">First Name</label>
-        <input type="text" name="billing_first_name" required>
+    <div class="popBack">
+        <button type="button" class="close-btn" id="closePopupBillingForm">&times;</button>
+        <h5>New Billing Addresses</h5>
+        <!-- Add New Address Form (Initially Hidden) -->
+        <div id="newBillingForm">
+        <form id="billingAddressForm">
+            <label for="billing_first_name">First Name</label>
+            <input type="text" name="billing_first_name" required>
 
-        <label for="billing_last_name">Last Name</label>
-        <input type="text" name="billing_last_name" required>
+            <label for="billing_last_name">Last Name</label>
+            <input type="text" name="billing_last_name" required>
 
-        <label for="billing_country">Country</label>
-        <select id="billing_country1" name="billing_country">
-            <?php foreach ($billing_countries as $code => $name) : ?>
-                <option value="<?php echo esc_attr($code); ?>"><?php echo esc_html($name); ?></option>
-            <?php endforeach; ?>
-        </select>
+            <label for="billing_country">Country</label>
+            <select id="billing_country1" name="billing_country">
+                <?php foreach ($billing_countries as $code => $name) : ?>
+                    <option value="<?php echo esc_attr($code); ?>"><?php echo esc_html($name); ?></option>
+                <?php endforeach; ?>
+            </select>
 
-        <label for="billing_address_1">Address Line 1</label>
-        <input type="text" name="billing_address_1" required>
+            <label for="billing_address_1">Address Line 1</label>
+            <input type="text" name="billing_address_1" required>
 
-        <label for="billing_address_2">Address Line 2</label>
-        <input type="text" name="billing_address_2">
+            <label for="billing_address_2">Address Line 2</label>
+            <input type="text" name="billing_address_2">
 
-        <label for="billing_city">City</label>
-        <input type="text" name="billing_city" required>
+            <label for="billing_city">City</label>
+            <input type="text" name="billing_city" required>
 
-        <label for="billing_state">State</label>
-        <select id="billing_state1" name="billing_state">
-            <!-- States will be dynamically populated via JavaScript -->
-        </select>
+            <label for="billing_state">State</label>
+            <select id="billing_state1" name="billing_state">
+                <!-- States will be dynamically populated via JavaScript -->
+            </select>
 
-        <label for="billing_postcode">Postcode</label>
-        <input type="text" name="billing_postcode" required>
-		<!-- New Phone Field -->
-		<label for="billing_phone">Phone</label>
-		<input type="text" name="billing_phone" required>
+            <label for="billing_postcode">Postcode</label>
+            <input type="text" name="billing_postcode" required>
+            <!-- New Phone Field -->
+            <label for="billing_phone">Phone</label>
+            <input type="text" name="billing_phone" required>
 
-		<!-- New Email Field -->
-		<label for="billing_email">Email</label>
-		<input type="email" name="billing_email" required>
+            <!-- New Email Field -->
+            <label for="billing_email">Email</label>
+            <input type="email" name="billing_email" required>
 
-        <button type="submit" class="btn btn-success">Save Address</button>
-		</form> 
-	
-	
+            <button type="submit" class="btn btn-success">Save Address</button>
+            </form> 
+        
+        
+        </div>
     </div>
+    <div class="popBackDrop"></div>
 </div>
 <!-- Popup shipping method -->
 <div id="shipping-popup" class="popup-container">
-    <div class="popup-content">
-        <h3>Select Shipping Method</h3>
-        <ul id="popup-shipping-methods">
-            <!-- Shipping options will be copied here dynamically -->
-        </ul>
-        <button id="close-shipping-popup">Close</button>
+    <div class="popBack">
+        <div class="popup-content">
+            <h3>Select Shipping Method</h3>
+            <ul id="popup-shipping-methods">
+                <!-- Shipping options will be copied here dynamically -->
+            </ul>
+            <button id="close-shipping-popup">Close</button>
+        </div>
     </div>
+    <div class="popBackDrop"></div>
 </div>
 
 <table class="shop_table checkout-cart-items">
@@ -580,9 +612,20 @@ document.querySelectorAll(".select-shipping").forEach(function(element) {
             `;
 
             shippingBox.innerHTML = addressHTML; 
+            
 
-            document.querySelectorAll(".select-shipping").forEach(el => el.style.backgroundColor = "");
-            this.style.backgroundColor = "#d0f0d0"; // Light green for selected address
+            // Remove class from all other elements
+            document.querySelectorAll(".select-shipping").forEach(el => {
+                el.style.backgroundColor = ""
+                el.classList.remove("selected-address-text");
+            });
+
+           
+            //this.style.backgroundColor = "#f00"; // Red for selected address
+            // this.style.color = "#fff";
+            // Add class only to the clicked one
+            this.classList.add("selected-address-text");
+            
         });
     });
 </script>
@@ -625,8 +668,19 @@ document.addEventListener("DOMContentLoaded", function() {
             billingBox.innerHTML = addressHTML; 
 
             // Highlight the selected address
-            document.querySelectorAll(".select-billing").forEach(el => el.style.backgroundColor = "");
-            this.style.backgroundColor = "#d0f0d0"; // Light green for selected address
+            // document.querySelectorAll(".select-billing").forEach(el => el.style.backgroundColor = "");
+
+            document.querySelectorAll(".select-billing").forEach(el => {
+                console.log('test');
+                el.style.backgroundColor = ""
+                el.classList.remove("selected-address-text");
+            });
+
+           
+            // this.style.backgroundColor = "#f00"; // Red for selected address
+            // this.style.color = "#fff";
+            // Add class only to the clicked one
+            this.classList.add("selected-address-text");
         });
     });
 });
@@ -982,7 +1036,7 @@ jQuery(document).ready(function ($)  {
         //console.log("Selected shipping method label:", selectedLabel);
         // var selectedLabel = $("#shipping_method").closest("li").find("label").text().trim();
         // console.log(selectedLabel);
-        $("#selected-shipping-method").html("<span>Selected Shipping Method : </span>"+selectedLabel);
+        $("#selected-shipping-method").html(selectedLabel);
 
         $("#open-shipping-popup").click(function() {
         $("#popup-shipping-methods").html($("#shipping_method").html());
@@ -1001,7 +1055,7 @@ jQuery(document).ready(function ($)  {
 
         var selectedLabel = $(this).closest("li").find("label").text().trim();
         //console.log(selectedLabel);
-        $("#selected-shipping-method").html("<span>Selected Shipping Method : </span>"+selectedLabel);
+        $("#selected-shipping-method").html(selectedLabel);
 
         // Close the popup
         $("#shipping-popup").fadeOut();
@@ -1020,10 +1074,21 @@ jQuery(document).ready(function ($)  {
 
 #popupContentShipping, #popupContentBilling, #popupNewBillingForm, #popupNewShippingForm,#shipping-popup {
     position: fixed;
+   
+    z-index: 1051; /* Ensure it appears above the modal */
+    display: none; /* Initially hidden */
+
+
+    
+}
+.popBack{
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 800px;
+    max-width:100%;
+    z-index: 1053;
 	height: 600px;
 	overflow: scroll;
     background: white;
@@ -1031,9 +1096,17 @@ jQuery(document).ready(function ($)  {
     border-radius: 8px;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
     text-align: center;
-    z-index: 1051; /* Ensure it appears above the modal */
-    display: none; /* Initially hidden */
 }
+.popBackDrop{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+	height: 100%;
+    background:  rgba(0, 0, 0, 0.5);
+    z-index: 1052;
+}
+
 
 /* Overlay to darken background when popup is open */
 #popupOverlay {
@@ -1056,6 +1129,13 @@ jQuery(document).ready(function ($)  {
     list-style: none;
     overflow: scroll;
     margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.address_custom_li:hover{
+    background: #EEE;
+    color: #000;
 }
 .billing-address-box p {
     margin: 0 0 5px 0;
@@ -1130,9 +1210,12 @@ div#newBillingForm,div##newShippingForm {
 }
 .address-section{
 	display:flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
 .billing-address-section,.shipping-address-section {
-    width: 43%;
+    flex: 1;
+    min-width: 300px;
     margin: 10px;
 }
 #newShippingForm, #newBillingForm {
@@ -1210,6 +1293,7 @@ ul#popup-shipping-methods {
     float: left;
 }
 .woocommerce > form.checkout{
+    min-width: 300px;
     width: 30%!important;
 }
 td.product-name {
@@ -1239,4 +1323,57 @@ button.qty-decrease, button.qty-increase {
 td.update-cart-btn-td {
     text-align: right;
 }
+/**Arpita */
+.d-flx {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+    min-height: 68px;
+}
+.d-flx h4{
+    margin-bottom: 0;
+}
+
+button#openPopupBilling {
+    background: #000;
+}
+.shipping-checkbox{
+    display: flex;
+    gap:5px;
+}
+.d-flxr {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 10px;
+    align-items: baseline;
+}
+button#openPopupShipping{
+    background: #000;
+}
+/* .select-shipping.selected {
+    background-color: #000;
+    color: #fff;
+} */
+.selected-address-text{
+    background-color: #f00;
+    color: #fff;
+}
+.selected-address-text:hover{
+    background-color: #f00;
+    color: #fff;
+}
+.billing-address-list ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.address_custom_li:{ float:none}
+.addressHead {
+    display: flex;
+    gap: 200px;
+}
+
+
 </style>
