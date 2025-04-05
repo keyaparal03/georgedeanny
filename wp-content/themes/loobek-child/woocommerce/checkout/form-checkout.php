@@ -328,12 +328,13 @@ $default_billing = !empty($addresses['billing']['address_0']) ? $addresses['bill
 <!-- Popup shipping method -->
 <div id="shipping-popup" class="popup-container">
     <div class="popBack">
+        <button type="button" class="close-btn" id="closePopupShippingMethod">&times;</button>
         <div class="popup-content">
             <h3>Select Shipping Method</h3>
             <ul id="popup-shipping-methods">
                 <!-- Shipping options will be copied here dynamically -->
             </ul>
-            <button id="close-shipping-popup">Close</button>
+            <!-- <button id="close-shipping-popup">Close</button> -->
         </div>
     </div>
     <div class="popBackDrop"></div>
@@ -457,6 +458,10 @@ jQuery(document).ready(function($) {
 
 	$("#openPopupBilling").click(function() {
         $("#popupContentBilling").removeClass("d-none").hide().fadeIn();
+    });
+
+    $("#closePopupShippingMethod").click(function() {
+        $("#shipping-popup").fadeOut();
     });
 
     
@@ -1141,7 +1146,7 @@ jQuery(document).ready(function ($)  {
     margin: 0 0 5px 0;
 }
 
-button#closePopupShipping, button#closePopupBilling, button#closePopupShippingForm, button#closePopupBillingForm {
+button#closePopupShipping, button#closePopupBilling, button#closePopupShippingForm, button#closePopupBillingForm, button#closePopupShippingMethod {
     right: 0px !important;
 	top: 0px !important;
     position: fixed;
@@ -1372,7 +1377,7 @@ button#openPopupShipping{
 .address_custom_li:{ float:none}
 .addressHead {
     display: flex;
-    gap: 200px;
+    gap: 220px;
 }
 
 
