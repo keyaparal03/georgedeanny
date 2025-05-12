@@ -630,13 +630,17 @@ document.querySelectorAll(".select-shipping").forEach(function(element) {
             // this.style.color = "#fff";
             // Add class only to the clicked one
             this.classList.add("selected-address-text");
+            // $("#popupContentShipping").fadeOut(); 
+            const popupContentBilling = document.getElementById("popupContentShipping");
+            popupContentBilling.style.display = "none"; 
             
         });
-    });
+});
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll(".select-billing").forEach(function(element) {
+        
         element.addEventListener("click", function() {
             let billing = JSON.parse(this.getAttribute("data-billing"));
             console.log(billing.billing_state);
@@ -676,16 +680,49 @@ document.addEventListener("DOMContentLoaded", function() {
             // document.querySelectorAll(".select-billing").forEach(el => el.style.backgroundColor = "");
 
             document.querySelectorAll(".select-billing").forEach(el => {
-                console.log('test');
+                //console.log('test222');
                 el.style.backgroundColor = ""
                 el.classList.remove("selected-address-text");
             });
+
+            const shipToDifferentCheckbox1 = document.getElementById("shipToDifferentAddress");
+
+            if (!shipToDifferentCheckbox1.checked) {
+
+                document.getElementById("shipping_first_name").value = billing.billing_first_name;
+                document.getElementById("shipping_last_name").value = billing.billing_last_name;
+                document.getElementById("shipping_address_1").value = billing.billing_address_1;
+                document.getElementById("shipping_address_2").value = billing.billing_address_2 || "";
+                document.getElementById("shipping_city").value = billing.billing_city;
+                document.getElementById("shipping_state").value = billing.billing_state;
+                document.getElementById("shipping_postcode").value = billing.billing_postcode;
+                document.getElementById("shipping_country").value = billing.billing_country;
+
+                let shippingBox = document.getElementById("shipping-address-box");
+        
+                if (!shippingBox) return; // Exit if element is not found
+
+                let addressHTML = `
+                    <p>${billing.billing_first_name} ${billing.billing_last_name}</p>
+                    <p>${billing.billing_address_1}</p>
+                    ${billing.billing_address_2 ? `<p>${billing.billing_address_2}</p>` : ""}
+                    <p>${billing.billing_city}, ${billing.billing_state} - ${billing.billing_postcode}</p>
+                    <p>${billing.billing_country}</p>
+                    ${billing.billing_phone ? `<p>Phone: ${billing.billing_phone}</p>` : ""}
+                    ${billing.billing_email ? `<p>Email: ${billing.billing_email}</p>` : ""}
+                `;
+
+                shippingBox.innerHTML = addressHTML; 
+
+            }
 
            
             // this.style.backgroundColor = "#f00"; // Red for selected address
             // this.style.color = "#fff";
             // Add class only to the clicked one
             this.classList.add("selected-address-text");
+            const popupContentBilling = document.getElementById("popupContentBilling");
+            popupContentBilling.style.display = "none"; 
         });
     });
 });
@@ -875,20 +912,6 @@ jQuery(document).ready(function ($)  {
 
             var formData = $(this).serialize(); // Serialize form data
 
-
-            
-
-            // console.log("First Name:", billingFirstName);
-            // console.log("Last Name:", billingLastName);
-            // console.log("Country:", billingCountry);
-            // console.log("Address 1:", billingAddress1);
-            // console.log("Address 2:", billingAddress2);
-            // console.log("City:", billingCity);
-            // console.log("State:", billingState);
-            // console.log("Postcode:", billingPostcode);
-            // console.log("Phone:", billingPhone);
-            // console.log("Email:", billingEmail);
-
             $.ajax({
                 type: "POST",
                 url: my_ajax_object.ajax_url, // From wp_localize_script
@@ -898,38 +921,35 @@ jQuery(document).ready(function ($)  {
                     formData: formData
                 },
                 success: function (response) {
-                    console.log(formData);
+                    // console.log(formData);
+                    // console.log(popupId);
+                    // console.log(response);
                     if (response.success) {
-                        if(popupId=='popupNewBillingForm'){
-                            
+                        if(popupId=='#popupNewBillingForm'){
+                            console.log("IF");
                             // Convert URL-encoded string to an object
                             let params = new URLSearchParams(formData);
 
                             let billingForm_1 = document.getElementById("billingAddressForm");
-                            console.log(billingForm_1);
-                            var data = {};
+                           
 
-                            $.each(billingForm_1, function(i, field) {
-                            data[field.name] = field.value;
-                            });
-
-                            console.log(data);
+                            // console.log(params);
 
                             // Get input values from the form
-                            let billingFirstName_1 = billingForm_1.querySelector("input[name='billing_first_name']").value;
-                            let billingLastName_1 = billingForm_1.querySelector("input[name='billing_last_name']").value;
-                            let billingCountry_1 = billingForm_1.querySelector("select[name='billing_country']").value;
-                            let billingAddress1_1 = billingForm_1.querySelector("input[name='billing_address_1']").value;
-                            let billingAddress2_1 = billingForm_1.querySelector("input[name='billing_address_2']").value;
-                            let billingCity_1 = billingForm_1.querySelector("input[name='billing_city']").value;
-                            let billingState_1 = billingForm_1.querySelector("select[name='billing_state']").value;
-                            let billingPostcode_1 = billingForm_1.querySelector("input[name='billing_postcode']").value;
-                            let billingPhone_1 = billingForm_1.querySelector("input[name='billing_phone']").value;
-                            let billingEmail_1 = billingForm_1.querySelector("input[name='billing_email']").value;
+                            let billingFirstName_1 = params.get("billing_first_name");
+                            let billingLastName_1 = params.get("billing_last_name");
+                            let billingCountry_1 =  params.get("billing_country");
+                            let billingAddress1_1 =  params.get("billing_address_1");
+                            let billingAddress2_1 =  params.get("billing_address_2"); 
+                            let billingCity_1 =  params.get("billing_city"); 
+                            let billingState_1 =  params.get("billing_state");
+                            let billingPostcode_1 =  params.get("billing_postcode");
+                            let billingPhone_1 =  params.get("billing_phone"); 
+                            let billingEmail_1 =  params.get("billing_email"); 
                             // Create new list item
 
-
-                            console.log(billingFirstName_1);
+                            // console.log("Keya"+billingFirstName_1);
+                            // console.log(billingFirstName_1);
                             let billingData = {
                                 "billing_first_name": billingFirstName_1,
                                 "billing_last_name": billingLastName_1,
@@ -956,34 +976,152 @@ jQuery(document).ready(function ($)  {
                                 billingForm_1.reset();
                             }
 
+                            // document.getElementById("billing_state").value = billingState_1;
+
+                            // // Manually trigger the change event
+                            // document.getElementById("billing_state").dispatchEvent(new Event("change"));
+                            // // Populate WooCommerce Billing Fields
+                            // document.getElementById("billing_first_name").value = billingFirstName_1;
+                            // document.getElementById("billing_last_name").value = billingLastName_1;
+                            // document.getElementById("billing_address_1").value = billingAddress1_1;
+                            // document.getElementById("billing_address_2").value = billingAddress2_1 || "";
+                            // document.getElementById("billing_city").value = billingCity_1;
+                            // document.getElementById("billing_state").value = billingState_1;
+                            // document.getElementById("billing_postcode").value = billingPostcode_1;
+                            // document.getElementById("billing_country").value = billingCountry_1;
+                            // document.getElementById("billing_phone").value = billingPhone_1|| "";
+                            // document.getElementById("billing_email").value = billingEmail_1 || "";
+
+                            // let billingBox = document.getElementById("billing-address-box");
+
+                            // if (!billingBox) return; // Exit if element is not found
+
+                            // let addressHTML = `
+                            //     <p>${billingFirstName_1} ${billingLastName_1}</p>
+                            //     <p>${billingAddress1_1}</p>
+                            //     ${billingAddress2_1 ? `<p>${billingAddress2_1}</p>` : ""}
+                            //     <p>${billingCity_1}, ${billingState_1} - ${billingPostcode_1}</p>
+                            //     <p>${billingCountry_1}</p>
+                            //     ${billingPhone_1 ? `<p>Phone: ${billingPhone_1}</p>` : ""}
+                            //     ${billingEmail_1 ? `<p>Email: ${billingEmail_1}</p>` : ""}
+                            // `;
+
+                            // billingBox.innerHTML = addressHTML; 
+
                             $(".billing-address-list ul").append(listItem); // Append new address to the list
+                            $("#popupNewBillingForm").fadeOut(); 
                             $("#popupContentBilling").fadeIn();
+
+                            document.querySelectorAll(".select-billing").forEach(function(element) {
+                                
+                                element.addEventListener("click", function() {
+                                    let billing = JSON.parse(this.getAttribute("data-billing"));
+                                    console.log(billing.billing_state);
+                                    document.getElementById("billing_state").value = billing.billing_state;
+
+                                    // Manually trigger the change event
+                                    document.getElementById("billing_state").dispatchEvent(new Event("change"));
+                                    // Populate WooCommerce Billing Fields
+                                    document.getElementById("billing_first_name").value = billing.billing_first_name;
+                                    document.getElementById("billing_last_name").value = billing.billing_last_name;
+                                    document.getElementById("billing_address_1").value = billing.billing_address_1;
+                                    document.getElementById("billing_address_2").value = billing.billing_address_2 || "";
+                                    document.getElementById("billing_city").value = billing.billing_city;
+                                    document.getElementById("billing_state").value = billing.billing_state;
+                                    document.getElementById("billing_postcode").value = billing.billing_postcode;
+                                    document.getElementById("billing_country").value = billing.billing_country;
+                                    document.getElementById("billing_phone").value = billing.billing_phone || "";
+                                    document.getElementById("billing_email").value = billing.billing_email || "";
+
+                                    let billingBox = document.getElementById("billing-address-box");
+
+                                    if (!billingBox) return; // Exit if element is not found
+
+                                    let addressHTML = `
+                                        <p>${billing.billing_first_name} ${billing.billing_last_name}</p>
+                                        <p>${billing.billing_address_1}</p>
+                                        ${billing.billing_address_2 ? `<p>${billing.billing_address_2}</p>` : ""}
+                                        <p>${billing.billing_city}, ${billing.billing_state} - ${billing.billing_postcode}</p>
+                                        <p>${billing.billing_country}</p>
+                                        ${billing.billing_phone ? `<p>Phone: ${billing.billing_phone}</p>` : ""}
+                                        ${billing.billing_email ? `<p>Email: ${billing.billing_email}</p>` : ""}
+                                    `;
+
+                                    billingBox.innerHTML = addressHTML; 
+
+                                    // Highlight the selected address
+                                    // document.querySelectorAll(".select-billing").forEach(el => el.style.backgroundColor = "");
+
+                                    document.querySelectorAll(".select-billing").forEach(el => {
+                                        // console.log('test222');
+                                        el.style.backgroundColor = ""
+                                        el.classList.remove("selected-address-text");
+                                    });
+
+                                    const shipToDifferentCheckbox2 = document.getElementById("shipToDifferentAddress");
+
+                                    if (!shipToDifferentCheckbox2.checked) {
+
+                                        document.getElementById("shipping_first_name").value = billing.billing_first_name;
+                                        document.getElementById("shipping_last_name").value = billing.billing_last_name;
+                                        document.getElementById("shipping_address_1").value = billing.billing_address_1;
+                                        document.getElementById("shipping_address_2").value = billing.billing_address_2 || "";
+                                        document.getElementById("shipping_city").value = billing.billing_city;
+                                        document.getElementById("shipping_state").value = billing.billing_state;
+                                        document.getElementById("shipping_postcode").value = billing.billing_postcode;
+                                        document.getElementById("shipping_country").value = billing.billing_country;
+
+                                        let shippingBox = document.getElementById("shipping-address-box");
+
+                                        if (!shippingBox) return; // Exit if element is not found
+
+                                        let addressHTML = `
+                                            <p>${billing.billing_first_name} ${billing.billing_last_name}</p>
+                                            <p>${billing.billing_address_1}</p>
+                                            ${billing.billing_address_2 ? `<p>${billing.billing_address_2}</p>` : ""}
+                                            <p>${billing.billing_city}, ${billing.billing_state} - ${billing.billing_postcode}</p>
+                                            <p>${billing.billing_country}</p>
+                                            ${billing.billing_phone ? `<p>Phone: ${billing.billing_phone}</p>` : ""}
+                                            ${billing.billing_email ? `<p>Email: ${billing.billing_email}</p>` : ""}
+                                        `;
+
+                                        shippingBox.innerHTML = addressHTML; 
+
+                                    }
+
+
+                                    
+                                    // this.style.backgroundColor = "#f00"; // Red for selected address
+                                    // this.style.color = "#fff";
+                                    // Add class only to the clicked one
+                                    this.classList.add("selected-address-text");
+                                    // $("#popupContentBilling").fadeOut(); 
+                                    const popupContentBilling = document.getElementById("popupContentBilling");
+                                    popupContentBilling.style.display = "none"; 
+                                });
+                            });
+
+
                            
+                        //    console.log("jafdkjw")
                         }else{
-                            console.log("test");
+                            console.log("test11");
                             // Convert URL-encoded string to an object
                             let params = new URLSearchParams(formData);
 
                             let shippingForm_1 = document.getElementById("shippingAddressForm");
-                            console.log(shippingForm_1);
-
+                            
                             // Get input values from the form
-                            let shippingFirstName_1 = shippingForm_1.querySelector("input[name='shipping_first_name']").value;
-                            let shippingLastName_1 = shippingForm_1.querySelector("input[name='shipping_last_name']").value;
-                            let shippingCountry_1 = shippingForm_1.querySelector("select[name='shipping_country']").value;
-                            let shippingAddress1_1 = shippingForm_1.querySelector("input[name='shipping_address_1']").value;
-                            let shippingAddress2_1 = shippingForm_1.querySelector("input[name='shipping_address_2']").value;
-                            let shippingCity_1 = shippingForm_1.querySelector("input[name='shipping_city']").value;
-                            let shippingState_1 = shippingForm_1.querySelector("select[name='shipping_state']").value;
-                            let shippingPostcode_1 = shippingForm_1.querySelector("input[name='shipping_postcode']").value;
-                            let shippingPhone_1 = shippingForm_1.querySelector("input[name='shipping_phone']").value;
-                            let shippingEmail_1 = shippingForm_1.querySelector("input[name='shipping_email']").value;
-                            // Create new list item
-
-                            console.log(shippingFirstName_1);
-                            if (shippingForm_1) {
-                                shippingForm_1.reset();
-                            }
+                            let shippingFirstName_1 = params.get("shipping_first_name");
+                            let shippingLastName_1 = params.get("shipping_last_name");
+                            let shippingCountry_1 = params.get("shipping_country");
+                            let shippingAddress1_1 =  params.get("shipping_address_1");
+                            let shippingAddress2_1 =  params.get("shipping_address_2");
+                            let shippingCity_1 =  params.get("shipping_city");
+                            let shippingState_1 =  params.get("shipping_state");
+                            let shippingPostcode_1 =  params.get("shipping_postcode");
+                            let shippingPhone_1 =  params.get("shipping_phone");
+                            let shippingEmail_1 =  params.get("shipping_email");
 
                             let billingData = {
                                 "shipping_first_name": shippingFirstName_1,
@@ -1008,8 +1146,69 @@ jQuery(document).ready(function ($)  {
                                 ${shippingEmail_1 ? "Email: " + shippingEmail_1 + "<br>" : ""}
                             </li>`;
 
+                            if (shippingForm_1) {
+                                shippingForm_1.reset();
+                            }
+
                             $(".shipping-address-list ul").append(listItem); // Append new address to the list
-                            $("#popupContentShipping").fadeIn();
+
+
+                            document.querySelectorAll(".select-shipping").forEach(function(element) {
+                                    element.addEventListener("click", function() {
+                                        let shipping = JSON.parse(this.getAttribute("data-shipping"));
+                                        console.log(shipping.shipping_state);
+
+                                        // Populate WooCommerce Shipping Fields
+                                        document.getElementById("shipping_first_name").value = shipping.shipping_first_name;
+                                        document.getElementById("shipping_last_name").value = shipping.shipping_last_name;
+                                        document.getElementById("shipping_address_1").value = shipping.shipping_address_1;
+                                        document.getElementById("shipping_address_2").value = shipping.shipping_address_2 || "";
+                                        document.getElementById("shipping_city").value = shipping.shipping_city;
+                                        document.getElementById("shipping_state").value = shipping.shipping_state;
+                                        document.getElementById("shipping_postcode").value = shipping.shipping_postcode;
+                                        document.getElementById("shipping_country").value = shipping.shipping_country;
+                                        //alert(document.getElementById("shipping_state").value);
+                                        // Highlight the selected shipping address
+
+                                        let shippingBox = document.getElementById("shipping-address-box");
+                                
+                                        if (!shippingBox) return; // Exit if element is not found
+
+                                        let addressHTML = `
+                                            <p>${shipping.shipping_first_name} ${shipping.shipping_last_name}</p>
+                                            <p>${shipping.shipping_address_1}</p>
+                                            ${shipping.shipping_address_2 ? `<p>${shipping.shipping_address_2}</p>` : ""}
+                                            <p>${shipping.shipping_city}, ${shipping.shipping_state} - ${shipping.shipping_postcode}</p>
+                                            <p>${shipping.shipping_country}</p>
+                                            ${shipping.shipping_phone ? `<p>Phone: ${shipping.shipping_phone}</p>` : ""}
+                                            ${shipping.shipping_email ? `<p>Email: ${shipping.shipping_email}</p>` : ""}
+                                        `;
+
+                                        shippingBox.innerHTML = addressHTML; 
+                                        
+
+                                        // Remove class from all other elements
+                                        document.querySelectorAll(".select-shipping").forEach(el => {
+                                            el.style.backgroundColor = ""
+                                            el.classList.remove("selected-address-text");
+                                        });
+
+                                    
+                                        //this.style.backgroundColor = "#f00"; // Red for selected address
+                                        // this.style.color = "#fff";
+                                        // Add class only to the clicked one
+                                        this.classList.add("selected-address-text");
+                                        // $("#popupContentShipping").fadeOut(); 
+                                        const popupContentBilling = document.getElementById("popupContentShipping");
+                                        popupContentBilling.style.display = "none"; 
+                                        
+                                    });
+                            });
+
+
+                            //$("#popupContentShipping").fadeIn();
+                            const popupContentShipping = document.getElementById("popupContentShipping");
+                            popupContentShipping.style.display = "none"; 
                         }
                     
 
