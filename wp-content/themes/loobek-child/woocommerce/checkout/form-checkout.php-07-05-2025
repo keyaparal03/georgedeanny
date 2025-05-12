@@ -900,20 +900,13 @@ jQuery(document).ready(function ($)  {
                 success: function (response) {
                     console.log(formData);
                     if (response.success) {
-                        if(popupId=='popupNewBillingForm'){
+                        if(popupId=='popupNewBillingForm')
+                        {
                             
                             // Convert URL-encoded string to an object
                             let params = new URLSearchParams(formData);
 
                             let billingForm_1 = document.getElementById("billingAddressForm");
-                            console.log(billingForm_1);
-                            var data = {};
-
-                            $.each(billingForm_1, function(i, field) {
-                            data[field.name] = field.value;
-                            });
-
-                            console.log(data);
 
                             // Get input values from the form
                             let billingFirstName_1 = billingForm_1.querySelector("input[name='billing_first_name']").value;
@@ -929,7 +922,7 @@ jQuery(document).ready(function ($)  {
                             // Create new list item
 
 
-                            console.log(billingFirstName_1);
+                           
                             let billingData = {
                                 "billing_first_name": billingFirstName_1,
                                 "billing_last_name": billingLastName_1,
@@ -960,12 +953,10 @@ jQuery(document).ready(function ($)  {
                             $("#popupContentBilling").fadeIn();
                            
                         }else{
-                            console.log("test");
                             // Convert URL-encoded string to an object
                             let params = new URLSearchParams(formData);
 
                             let shippingForm_1 = document.getElementById("shippingAddressForm");
-                            console.log(shippingForm_1);
 
                             // Get input values from the form
                             let shippingFirstName_1 = shippingForm_1.querySelector("input[name='shipping_first_name']").value;
@@ -980,7 +971,7 @@ jQuery(document).ready(function ($)  {
                             let shippingEmail_1 = shippingForm_1.querySelector("input[name='shipping_email']").value;
                             // Create new list item
 
-                            console.log(shippingFirstName_1);
+
                             if (shippingForm_1) {
                                 shippingForm_1.reset();
                             }
@@ -1032,7 +1023,6 @@ jQuery(document).ready(function ($)  {
      * Shipping method
      */
     var i = 0;
-    console.log("called I = "+ i);
     jQuery(document.body).on('updated_checkout', function() {
         // Call your custom function here
         console.log("called"+ i);
