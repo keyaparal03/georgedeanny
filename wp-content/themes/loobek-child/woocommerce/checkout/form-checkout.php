@@ -1327,7 +1327,7 @@ button#closePopupShipping, button#closePopupBilling, button#closePopupShippingFo
     right: 0px !important;
 	top: 0px !important;
     position: fixed;
-    background: #ffff !important;
+    background: transparent;
     border: none;
     color: #000;
     font-size: 39px;
@@ -1556,6 +1556,15 @@ button#openPopupShipping{
     display: flex;
     gap: 220px;
 }
-
-
+li.wc_payment_method.payment_method_authnet label{
+    font-size: 0;
+}
+li.wc_payment_method.payment_method_authnet img {
+    width: 100px;
+    margin: 5px !important;
+    display: inline-block;
+}
+li.wc_payment_method.payment_method_authnet img:nth-child(3) {
+    margin-left: 25px !important;
+}
 </style>
