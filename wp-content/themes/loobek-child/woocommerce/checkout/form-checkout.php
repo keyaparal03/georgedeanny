@@ -1559,12 +1559,12 @@ button#openPopupShipping{
 li.wc_payment_method.payment_method_authnet label{
     font-size: 0;
 }
+li.wc_payment_method.payment_method_authnet img:nth-child(3) {
+    margin-left: 25px !important;
+}
 li.wc_payment_method.payment_method_authnet img {
     width: 100px;
     margin: 5px !important;
     display: inline-block;
-}
-li.wc_payment_method.payment_method_authnet img:nth-child(3) {
-    margin-left: 25px !important;
 }
 </style>

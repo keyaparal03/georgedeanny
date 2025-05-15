@@ -230,3 +230,11 @@ add_filter( 'gettext', function( $translated_text, $text, $domain ) {
     }
     return $translated_text;
 }, 20, 3 );
+
+function conditionally_disable_shipping_cost_on_cart($needs_shipping) {
+    if (is_cart()) {
+        return false; // Disable shipping calculation
+    }
+    return $needs_shipping; // Keep it normal elsewhere
+}
+add_filter('woocommerce_cart_needs_shipping', 'conditionally_disable_shipping_cost_on_cart');
