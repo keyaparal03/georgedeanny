@@ -83,3 +83,6 @@ body.woocommerce-cart .cart_totals .shipping {
 a.woocommerce-privacy-policy-link {
     text-transform: capitalize;
 }
+.woocommerce-notices-wrapper {
+    display: none;
+}
