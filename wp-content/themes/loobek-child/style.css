@@ -86,3 +86,6 @@ a.woocommerce-privacy-policy-link {
 .woocommerce-notices-wrapper {
     display: none;
 }
+.woocommerce-message{
+    display: none;
+}

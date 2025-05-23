@@ -737,6 +737,45 @@ document.addEventListener("DOMContentLoaded", function() {
             shippingAddressBox.style.display = "block"; // Show shipping section
             openPopupShipping.style.display = "inline-block"; // Show Change Shipping Address button
         } else {
+
+
+            let billing_first_name1 =  document.getElementById("billing_first_name").value;
+            let billing_last_name1 = document.getElementById("billing_last_name").value;
+            let billing_address_11 = document.getElementById("billing_address_1").value;
+            let billing_address_21  = document.getElementById("billing_address_2").value;
+            let billing_city1 =  document.getElementById("billing_city").value;
+            let billing_state1 = document.getElementById("billing_state").value;
+            let billing_postcode1 =  document.getElementById("billing_postcode").value;
+            let billing_country1 =  document.getElementById("billing_country").value;
+            let billing_phone1 = document.getElementById("billing_phone").value || "";
+            let billing_email1 = document.getElementById("billing_email").value || "";
+
+            document.getElementById("shipping_first_name").value = billing_first_name1;
+            document.getElementById("shipping_last_name").value = billing_last_name1;
+            document.getElementById("shipping_address_1").value = billing_address_11;
+            document.getElementById("shipping_address_2").value = billing_address_21;
+            document.getElementById("shipping_city").value = billing_city1;
+            document.getElementById("shipping_state").value = billing_state1;
+            document.getElementById("shipping_postcode").value = billing_postcode1;
+            document.getElementById("shipping_country").value = billing_country1;
+
+            let shippingBox = document.getElementById("shipping-address-box");
+
+            if (!shippingBox) return; // Exit if element is not found
+
+            let addressHTML = `
+                <p>${billing_first_name1} ${billing_last_name1}</p>
+                <p>${billing_address_11}</p>
+                ${billing_address_21 ? `<p>${billing_address_21}</p>` : ""}
+                <p>${billing_city1}, ${billing_state1} - ${billing_postcode1}</p>
+                <p>${billing_country1}</p>
+                ${billing_phone1 ? `<p>Phone: ${billing_phone1}</p>` : ""}
+                ${billing_email1 ? `<p>Email: ${billing_email1}</p>` : ""}
+            `;
+
+            shippingBox.innerHTML = addressHTML; 
+
+            // console.log(  document.getElementById("billing_first_name").value);
             shippingAddressBox.style.display = "none"; // Hide shipping section
             openPopupShipping.style.display = "none"; // Hide Change Shipping Address button
         }
@@ -1566,5 +1605,8 @@ li.wc_payment_method.payment_method_authnet img {
     width: 100px;
     margin: 5px !important;
     display: inline-block;
+}
+.woocommerce-checkout .woocommerce-message{
+    display: none;
 }
 </style>
